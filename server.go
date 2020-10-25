@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-
 	"foodly/ent/account"
 
 	"github.com/gin-gonic/gin"
@@ -15,12 +14,11 @@ func ping(c *gin.Context) {
 		"message": "pong",
 	})
 }
-
 // create a new account
 func register(c *gin.Context) {
 	ctx := context.Context(context.Background())
 	// check weather username is repetidious or not
-	_, err := curser.Account.Query().Where(account.UsernameEQ(c.Query("username"))).First(ctx)
+	_, err := cursor.Account.Query().Where(account.UsernameEQ(c.Query("username"))).First(ctx)
 	if err == nil {
 		c.JSON(400, gin.H{
 			"error": "username was previously used. Please use diffrent username",
@@ -29,7 +27,7 @@ func register(c *gin.Context) {
 	}
 	// generate a token and write the entry to db
 	token := GenerateToken(c.Query("password"))
-	_, err = curser.Account.Create().
+	_, err = cursor.Account.Create().
 		SetUsername(c.Query("username")).
 		SetPassword(Hash(c.Query("password"))).
 		SetRole(c.Query("role")).
@@ -46,11 +44,10 @@ func register(c *gin.Context) {
 		"token": token,
 	})
 }
-
 // login to account
 func login(c *gin.Context) {
 	ctx := context.Context(context.Background())
-	u, err := curser.Account.Query().Where(account.UsernameEqualFold(c.Query("username")),
+	u, err := cursor.Account.Query().Where(account.UsernameEqualFold(c.Query("username")),
 		account.PasswordEqualFold(Hash(c.Query("password")))).First(ctx)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -62,11 +59,10 @@ func login(c *gin.Context) {
 		"token": u.Token,
 	})
 }
-
 // submit food
 func SubmitFood(c *gin.Context) {
 	ctx := context.Context(context.Background())
-	u, err := curser.Account.Query().Where(account.TokenEqualFold(c.Query("token"))).First(ctx)
+	u, err := cursor.Account.Query().Where(account.TokenEqualFold(c.Query("token"))).First(ctx)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "no such token in db. maybe your entering a wrong token.",
@@ -85,7 +81,7 @@ func SubmitFood(c *gin.Context) {
 		})
 		return
 	}
-	_, err = curser.Food.Create().
+	_, err = cursor.Food.Create().
 		SetRestaurant(u.Username).
 		SetPrice(c.Query("price")).
 		SetName(c.Query("name")).
@@ -100,7 +96,7 @@ func SubmitFood(c *gin.Context) {
 		"status": "ok",
 	})
 }
-
+// upload images in ./uploads folder
 func UploadImage(c *gin.Context) {
 	file, err := c.FormFile("image")
 	if err != nil {
@@ -108,7 +104,7 @@ func UploadImage(c *gin.Context) {
 			"err": fmt.Errorf("%s", err),
 		})
 	}
-	err = c.SaveUploadedFile(file, "savings/"+file.Filename)
+	err = c.SaveUploadedFile(file, "uploads/"+file.Filename)
 
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -118,4 +114,25 @@ func UploadImage(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"filename": file.Filename,
 	})
+}
+// server an image based on their name
+func ServeImage(c *gin.Context){
+	name := c.Param("name")
+	c.File("uploads/" + name)
+}
+// query restaurant based on their city
+func QueryRestaurants(c *gin.Context){
+	ctx := context.Context(context.Background())
+	accounts, err := cursor.Account.Query().Where(account.CityEQ(c.Query("city")), account.RoleEQ("restaurant")).All(ctx)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "no restaurant in your city is registered. it is time for leaving this town.",
+		})
+	}
+	for i := 0 ; i <= len(accounts); i++ {
+		accounts[i].Token = ""
+		accounts[i].Password = ""
+	}
+	fmt.Println(accounts)
+	c.JSON(200, accounts)
 }

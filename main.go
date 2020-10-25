@@ -9,7 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var curser *ent.Client
+var cursor *ent.Client
 
 func main() {
 	client, err := ent.Open("sqlite3", "file:ent?mode=memory&cache=shared&_fk=1")
@@ -21,12 +21,15 @@ func main() {
 	if err := client.Schema.Create(context.Background()); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
-	curser = client
+	cursor = client
 	r := gin.Default()
 	r.MaxMultipartMemory = 1 << 20
-	r.GET("/ping", register)
+	r.GET("/ping", ping)
 	r.POST("/register", register)
 	r.POST("/login", login)
 	r.POST("/submit/food", SubmitFood)
+	r.POST("/upload/image", UploadImage)
+	r.GET("/q/image/:name", ServeImage)
+	r.GET("/q/restbycity", QueryRestaurants)
 	r.Run(":5000")
 }

@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/facebook/ent v0.4.3
+	github.com/gin-gonic/contrib v0.0.0-20201005132743-ca038bbf2944 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
