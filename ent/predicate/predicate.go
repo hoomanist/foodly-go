@@ -14,3 +14,6 @@ type Comment func(*sql.Selector)
 
 // Food is the predicate function for food builders.
 type Food func(*sql.Selector)
+
+// Vote is the predicate function for vote builders.
+type Vote func(*sql.Selector)

@@ -56,11 +56,27 @@ var (
 		PrimaryKey:  []*schema.Column{FoodsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{},
 	}
+	// VotesColumns holds the columns for the "votes" table.
+	VotesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "status", Type: field.TypeString},
+		{Name: "restaurant", Type: field.TypeString},
+		{Name: "food", Type: field.TypeString},
+		{Name: "username", Type: field.TypeString},
+	}
+	// VotesTable holds the schema information for the "votes" table.
+	VotesTable = &schema.Table{
+		Name:        "votes",
+		Columns:     VotesColumns,
+		PrimaryKey:  []*schema.Column{VotesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AccountsTable,
 		CommentsTable,
 		FoodsTable,
+		VotesTable,
 	}
 )
 

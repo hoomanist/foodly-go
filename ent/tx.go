@@ -18,6 +18,8 @@ type Tx struct {
 	Comment *CommentClient
 	// Food is the client for interacting with the Food builders.
 	Food *FoodClient
+	// Vote is the client for interacting with the Vote builders.
+	Vote *VoteClient
 
 	// lazily loaded.
 	client     *Client
@@ -156,6 +158,7 @@ func (tx *Tx) init() {
 	tx.Account = NewAccountClient(tx.config)
 	tx.Comment = NewCommentClient(tx.config)
 	tx.Food = NewFoodClient(tx.config)
+	tx.Vote = NewVoteClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

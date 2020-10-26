@@ -12,6 +12,7 @@ import (
 	"foodly/ent/account"
 	"foodly/ent/comment"
 	"foodly/ent/food"
+	"foodly/ent/vote"
 
 	"github.com/facebook/ent/dialect"
 	"github.com/facebook/ent/dialect/sql"
@@ -28,6 +29,8 @@ type Client struct {
 	Comment *CommentClient
 	// Food is the client for interacting with the Food builders.
 	Food *FoodClient
+	// Vote is the client for interacting with the Vote builders.
+	Vote *VoteClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -44,6 +47,7 @@ func (c *Client) init() {
 	c.Account = NewAccountClient(c.config)
 	c.Comment = NewCommentClient(c.config)
 	c.Food = NewFoodClient(c.config)
+	c.Vote = NewVoteClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -79,6 +83,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Account: NewAccountClient(cfg),
 		Comment: NewCommentClient(cfg),
 		Food:    NewFoodClient(cfg),
+		Vote:    NewVoteClient(cfg),
 	}, nil
 }
 
@@ -97,6 +102,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Account: NewAccountClient(cfg),
 		Comment: NewCommentClient(cfg),
 		Food:    NewFoodClient(cfg),
+		Vote:    NewVoteClient(cfg),
 	}, nil
 }
 
@@ -128,6 +134,7 @@ func (c *Client) Use(hooks ...Hook) {
 	c.Account.Use(hooks...)
 	c.Comment.Use(hooks...)
 	c.Food.Use(hooks...)
+	c.Vote.Use(hooks...)
 }
 
 // AccountClient is a client for the Account schema.
@@ -392,4 +399,92 @@ func (c *FoodClient) GetX(ctx context.Context, id int) *Food {
 // Hooks returns the client hooks.
 func (c *FoodClient) Hooks() []Hook {
 	return c.hooks.Food
+}
+
+// VoteClient is a client for the Vote schema.
+type VoteClient struct {
+	config
+}
+
+// NewVoteClient returns a client for the Vote from the given config.
+func NewVoteClient(c config) *VoteClient {
+	return &VoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vote.Hooks(f(g(h())))`.
+func (c *VoteClient) Use(hooks ...Hook) {
+	c.hooks.Vote = append(c.hooks.Vote, hooks...)
+}
+
+// Create returns a create builder for Vote.
+func (c *VoteClient) Create() *VoteCreate {
+	mutation := newVoteMutation(c.config, OpCreate)
+	return &VoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// BulkCreate returns a builder for creating a bulk of Vote entities.
+func (c *VoteClient) CreateBulk(builders ...*VoteCreate) *VoteCreateBulk {
+	return &VoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Vote.
+func (c *VoteClient) Update() *VoteUpdate {
+	mutation := newVoteMutation(c.config, OpUpdate)
+	return &VoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VoteClient) UpdateOne(v *Vote) *VoteUpdateOne {
+	mutation := newVoteMutation(c.config, OpUpdateOne, withVote(v))
+	return &VoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VoteClient) UpdateOneID(id int) *VoteUpdateOne {
+	mutation := newVoteMutation(c.config, OpUpdateOne, withVoteID(id))
+	return &VoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Vote.
+func (c *VoteClient) Delete() *VoteDelete {
+	mutation := newVoteMutation(c.config, OpDelete)
+	return &VoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *VoteClient) DeleteOne(v *Vote) *VoteDeleteOne {
+	return c.DeleteOneID(v.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *VoteClient) DeleteOneID(id int) *VoteDeleteOne {
+	builder := c.Delete().Where(vote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VoteDeleteOne{builder}
+}
+
+// Query returns a query builder for Vote.
+func (c *VoteClient) Query() *VoteQuery {
+	return &VoteQuery{config: c.config}
+}
+
+// Get returns a Vote entity by its id.
+func (c *VoteClient) Get(ctx context.Context, id int) (*Vote, error) {
+	return c.Query().Where(vote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VoteClient) GetX(ctx context.Context, id int) *Vote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VoteClient) Hooks() []Hook {
+	return c.hooks.Vote
 }

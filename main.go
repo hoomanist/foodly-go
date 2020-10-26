@@ -34,6 +34,7 @@ func main() {
 	r.GET("/q/foodbyRTi", FoodsByRest)
 	r.POST("/submit/comment", CreateCamment)
 	r.GET("/q/comment", QueryComment)
+	r.POST("/vote/food", Vote)
 	err = r.Run(":5000")
 	if err != nil {
 		panic(err)

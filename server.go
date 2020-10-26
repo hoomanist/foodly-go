@@ -6,6 +6,7 @@ import (
 	"foodly/ent/account"
 	"foodly/ent/comment"
 	"foodly/ent/food"
+	"foodly/ent/vote"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -15,6 +16,7 @@ func ping(c *gin.Context) {
 		"message": "pong",
 	})
 }
+
 // create a new account
 func register(c *gin.Context) {
 	ctx := context.Context(context.Background())
@@ -45,6 +47,7 @@ func register(c *gin.Context) {
 		"token": token,
 	})
 }
+
 // login to account
 func login(c *gin.Context) {
 	ctx := context.Context(context.Background())
@@ -60,6 +63,7 @@ func login(c *gin.Context) {
 		"token": u.Token,
 	})
 }
+
 // submit food
 func SubmitFood(c *gin.Context) {
 	ctx := context.Context(context.Background())
@@ -97,6 +101,7 @@ func SubmitFood(c *gin.Context) {
 		"status": "ok",
 	})
 }
+
 // upload images in ./uploads folder
 func UploadImage(c *gin.Context) {
 	file, err := c.FormFile("image")
@@ -116,13 +121,15 @@ func UploadImage(c *gin.Context) {
 		"filename": file.Filename,
 	})
 }
+
 // server an image based on their name
-func ServeImage(c *gin.Context){
+func ServeImage(c *gin.Context) {
 	name := c.Param("name")
 	c.File("uploads/" + name)
 }
+
 // query restaurant based on their city
-func QueryRestaurants(c *gin.Context){
+func QueryRestaurants(c *gin.Context) {
 	ctx := context.Context(context.Background())
 	accounts, err := cursor.Account.Query().Where(account.CityEQ(c.Query("city")), account.RoleEQ("restaurant")).All(ctx)
 	if err != nil {
@@ -130,15 +137,16 @@ func QueryRestaurants(c *gin.Context){
 			"error": "no restaurant in your city is registered. it is time for leaving this town.",
 		})
 	}
-	for i := 0 ; i <= len(accounts); i++ {
+	for i := 0; i <= len(accounts); i++ {
 		accounts[i].Token = ""
 		accounts[i].Password = ""
 	}
 	fmt.Println(accounts)
 	c.JSON(200, accounts)
 }
+
 // get foods by their restaurant
-func FoodsByRest(c *gin.Context){
+func FoodsByRest(c *gin.Context) {
 	ctx := context.Context(context.Background())
 	foods, err := cursor.Food.Query().Where(food.RestaurantEQ(c.Query("restaurant"))).All(ctx)
 	if err != nil {
@@ -148,8 +156,9 @@ func FoodsByRest(c *gin.Context){
 	}
 	c.JSON(200, foods)
 }
+
 // submit a Comment
-func CreateCamment(c *gin.Context){
+func CreateCamment(c *gin.Context) {
 	ctx := context.Context(context.Background())
 	username, err := cursor.Account.Query().Where(account.PasswordEQ(c.Query("token"))).First(ctx)
 	if err != nil {
@@ -168,8 +177,9 @@ func CreateCamment(c *gin.Context){
 		"status": "ok",
 	})
 }
+
 // query comment
-func QueryComment(c *gin.Context){
+func QueryComment(c *gin.Context) {
 	ctx := context.Context(context.Background())
 	name := c.Query("foodname")
 	restaurant := c.Query("restaurant")
@@ -180,4 +190,49 @@ func QueryComment(c *gin.Context){
 		})
 	}
 	c.JSON(200, comments)
+}
+
+// vote
+func Vote(c *gin.Context) {
+	ctx := context.Context(context.Background())
+	username, err := cursor.Account.Query().Where(account.PasswordEQ(c.Query("token"))).First(ctx)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": fmt.Errorf("%s", err),
+		})
+		_, err = cursor.Vote.Create().
+			SetUsername(username.Username).
+			SetStatus(c.Query("dir")).
+			SetFood(c.Query("food")).
+			SetRestaurant(c.Query("restaurant")).Save(ctx)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": fmt.Errorf("%s", err),
+			})
+		}
+	}
+	c.JSON(200, gin.H{
+		"status": "ok",
+	})
+}
+
+// query votes
+func QueryVotes(c *gin.Context) {
+	ctx := context.Context(context.Background())
+	Up, err := cursor.Vote.Query().Where(vote.StatusEqualFold("up")).All(ctx)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": fmt.Errorf("%s", err),
+		})
+	}
+	Down, err := cursor.Vote.Query().Where(vote.StatusEqualFold("down")).All(ctx)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": fmt.Errorf("%s", err),
+		})
+	}
+	number := len(Up) - len(Down)
+	c.JSON(200, gin.H{
+		"vote": string(number),
+	})
 }
