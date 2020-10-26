@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"foodly/ent/account"
+	"foodly/ent/comment"
 	"foodly/ent/food"
 	"sync"
 
@@ -22,6 +23,7 @@ const (
 
 	// Node types.
 	TypeAccount = "Account"
+	TypeComment = "Comment"
 	TypeFood    = "Food"
 )
 
@@ -35,9 +37,9 @@ type AccountMutation struct {
 	username      *string
 	password      *string
 	email         *string
-	role          *string
-	city          *string
 	token         *string
+	city          *string
+	role          *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Account, error)
@@ -233,41 +235,41 @@ func (m *AccountMutation) ResetEmail() {
 	m.email = nil
 }
 
-// SetRole sets the role field.
-func (m *AccountMutation) SetRole(s string) {
-	m.role = &s
+// SetToken sets the token field.
+func (m *AccountMutation) SetToken(s string) {
+	m.token = &s
 }
 
-// Role returns the role value in the mutation.
-func (m *AccountMutation) Role() (r string, exists bool) {
-	v := m.role
+// Token returns the token value in the mutation.
+func (m *AccountMutation) Token() (r string, exists bool) {
+	v := m.token
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldRole returns the old role value of the Account.
+// OldToken returns the old token value of the Account.
 // If the Account object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *AccountMutation) OldRole(ctx context.Context) (v string, err error) {
+func (m *AccountMutation) OldToken(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldRole is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldToken is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldRole requires an ID field in the mutation")
+		return v, fmt.Errorf("OldToken requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRole: %w", err)
+		return v, fmt.Errorf("querying old value for OldToken: %w", err)
 	}
-	return oldValue.Role, nil
+	return oldValue.Token, nil
 }
 
-// ResetRole reset all changes of the "role" field.
-func (m *AccountMutation) ResetRole() {
-	m.role = nil
+// ResetToken reset all changes of the "token" field.
+func (m *AccountMutation) ResetToken() {
+	m.token = nil
 }
 
 // SetCity sets the city field.
@@ -307,41 +309,41 @@ func (m *AccountMutation) ResetCity() {
 	m.city = nil
 }
 
-// SetToken sets the token field.
-func (m *AccountMutation) SetToken(s string) {
-	m.token = &s
+// SetRole sets the role field.
+func (m *AccountMutation) SetRole(s string) {
+	m.role = &s
 }
 
-// Token returns the token value in the mutation.
-func (m *AccountMutation) Token() (r string, exists bool) {
-	v := m.token
+// Role returns the role value in the mutation.
+func (m *AccountMutation) Role() (r string, exists bool) {
+	v := m.role
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldToken returns the old token value of the Account.
+// OldRole returns the old role value of the Account.
 // If the Account object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *AccountMutation) OldToken(ctx context.Context) (v string, err error) {
+func (m *AccountMutation) OldRole(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldToken is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldRole is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldToken requires an ID field in the mutation")
+		return v, fmt.Errorf("OldRole requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldToken: %w", err)
+		return v, fmt.Errorf("querying old value for OldRole: %w", err)
 	}
-	return oldValue.Token, nil
+	return oldValue.Role, nil
 }
 
-// ResetToken reset all changes of the "token" field.
-func (m *AccountMutation) ResetToken() {
-	m.token = nil
+// ResetRole reset all changes of the "role" field.
+func (m *AccountMutation) ResetRole() {
+	m.role = nil
 }
 
 // Op returns the operation name.
@@ -368,14 +370,14 @@ func (m *AccountMutation) Fields() []string {
 	if m.email != nil {
 		fields = append(fields, account.FieldEmail)
 	}
-	if m.role != nil {
-		fields = append(fields, account.FieldRole)
+	if m.token != nil {
+		fields = append(fields, account.FieldToken)
 	}
 	if m.city != nil {
 		fields = append(fields, account.FieldCity)
 	}
-	if m.token != nil {
-		fields = append(fields, account.FieldToken)
+	if m.role != nil {
+		fields = append(fields, account.FieldRole)
 	}
 	return fields
 }
@@ -391,12 +393,12 @@ func (m *AccountMutation) Field(name string) (ent.Value, bool) {
 		return m.Password()
 	case account.FieldEmail:
 		return m.Email()
-	case account.FieldRole:
-		return m.Role()
-	case account.FieldCity:
-		return m.City()
 	case account.FieldToken:
 		return m.Token()
+	case account.FieldCity:
+		return m.City()
+	case account.FieldRole:
+		return m.Role()
 	}
 	return nil, false
 }
@@ -412,12 +414,12 @@ func (m *AccountMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldPassword(ctx)
 	case account.FieldEmail:
 		return m.OldEmail(ctx)
-	case account.FieldRole:
-		return m.OldRole(ctx)
-	case account.FieldCity:
-		return m.OldCity(ctx)
 	case account.FieldToken:
 		return m.OldToken(ctx)
+	case account.FieldCity:
+		return m.OldCity(ctx)
+	case account.FieldRole:
+		return m.OldRole(ctx)
 	}
 	return nil, fmt.Errorf("unknown Account field %s", name)
 }
@@ -448,12 +450,12 @@ func (m *AccountMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEmail(v)
 		return nil
-	case account.FieldRole:
+	case account.FieldToken:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetRole(v)
+		m.SetToken(v)
 		return nil
 	case account.FieldCity:
 		v, ok := value.(string)
@@ -462,12 +464,12 @@ func (m *AccountMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCity(v)
 		return nil
-	case account.FieldToken:
+	case account.FieldRole:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetToken(v)
+		m.SetRole(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Account field %s", name)
@@ -528,14 +530,14 @@ func (m *AccountMutation) ResetField(name string) error {
 	case account.FieldEmail:
 		m.ResetEmail()
 		return nil
-	case account.FieldRole:
-		m.ResetRole()
+	case account.FieldToken:
+		m.ResetToken()
 		return nil
 	case account.FieldCity:
 		m.ResetCity()
 		return nil
-	case account.FieldToken:
-		m.ResetToken()
+	case account.FieldRole:
+		m.ResetRole()
 		return nil
 	}
 	return fmt.Errorf("unknown Account field %s", name)
@@ -593,6 +595,464 @@ func (m *AccountMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Account edge %s", name)
 }
 
+// CommentMutation represents an operation that mutate the Comments
+// nodes in the graph.
+type CommentMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	food          *string
+	restaurant    *string
+	msg           *string
+	username      *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Comment, error)
+}
+
+var _ ent.Mutation = (*CommentMutation)(nil)
+
+// commentOption allows to manage the mutation configuration using functional options.
+type commentOption func(*CommentMutation)
+
+// newCommentMutation creates new mutation for $n.Name.
+func newCommentMutation(c config, op Op, opts ...commentOption) *CommentMutation {
+	m := &CommentMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeComment,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withCommentID sets the id field of the mutation.
+func withCommentID(id int) commentOption {
+	return func(m *CommentMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Comment
+		)
+		m.oldValue = func(ctx context.Context) (*Comment, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Comment.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withComment sets the old Comment of the mutation.
+func withComment(node *Comment) commentOption {
+	return func(m *CommentMutation) {
+		m.oldValue = func(context.Context) (*Comment, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m CommentMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m CommentMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the id value in the mutation. Note that, the id
+// is available only if it was provided to the builder.
+func (m *CommentMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetFood sets the food field.
+func (m *CommentMutation) SetFood(s string) {
+	m.food = &s
+}
+
+// Food returns the food value in the mutation.
+func (m *CommentMutation) Food() (r string, exists bool) {
+	v := m.food
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFood returns the old food value of the Comment.
+// If the Comment object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *CommentMutation) OldFood(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldFood is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldFood requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFood: %w", err)
+	}
+	return oldValue.Food, nil
+}
+
+// ResetFood reset all changes of the "food" field.
+func (m *CommentMutation) ResetFood() {
+	m.food = nil
+}
+
+// SetRestaurant sets the restaurant field.
+func (m *CommentMutation) SetRestaurant(s string) {
+	m.restaurant = &s
+}
+
+// Restaurant returns the restaurant value in the mutation.
+func (m *CommentMutation) Restaurant() (r string, exists bool) {
+	v := m.restaurant
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRestaurant returns the old restaurant value of the Comment.
+// If the Comment object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *CommentMutation) OldRestaurant(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldRestaurant is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldRestaurant requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRestaurant: %w", err)
+	}
+	return oldValue.Restaurant, nil
+}
+
+// ResetRestaurant reset all changes of the "restaurant" field.
+func (m *CommentMutation) ResetRestaurant() {
+	m.restaurant = nil
+}
+
+// SetMsg sets the msg field.
+func (m *CommentMutation) SetMsg(s string) {
+	m.msg = &s
+}
+
+// Msg returns the msg value in the mutation.
+func (m *CommentMutation) Msg() (r string, exists bool) {
+	v := m.msg
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMsg returns the old msg value of the Comment.
+// If the Comment object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *CommentMutation) OldMsg(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldMsg is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldMsg requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMsg: %w", err)
+	}
+	return oldValue.Msg, nil
+}
+
+// ResetMsg reset all changes of the "msg" field.
+func (m *CommentMutation) ResetMsg() {
+	m.msg = nil
+}
+
+// SetUsername sets the username field.
+func (m *CommentMutation) SetUsername(s string) {
+	m.username = &s
+}
+
+// Username returns the username value in the mutation.
+func (m *CommentMutation) Username() (r string, exists bool) {
+	v := m.username
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUsername returns the old username value of the Comment.
+// If the Comment object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *CommentMutation) OldUsername(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUsername is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUsername requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUsername: %w", err)
+	}
+	return oldValue.Username, nil
+}
+
+// ResetUsername reset all changes of the "username" field.
+func (m *CommentMutation) ResetUsername() {
+	m.username = nil
+}
+
+// Op returns the operation name.
+func (m *CommentMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (Comment).
+func (m *CommentMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during
+// this mutation. Note that, in order to get all numeric
+// fields that were in/decremented, call AddedFields().
+func (m *CommentMutation) Fields() []string {
+	fields := make([]string, 0, 4)
+	if m.food != nil {
+		fields = append(fields, comment.FieldFood)
+	}
+	if m.restaurant != nil {
+		fields = append(fields, comment.FieldRestaurant)
+	}
+	if m.msg != nil {
+		fields = append(fields, comment.FieldMsg)
+	}
+	if m.username != nil {
+		fields = append(fields, comment.FieldUsername)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name.
+// The second boolean value indicates that this field was
+// not set, or was not define in the schema.
+func (m *CommentMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case comment.FieldFood:
+		return m.Food()
+	case comment.FieldRestaurant:
+		return m.Restaurant()
+	case comment.FieldMsg:
+		return m.Msg()
+	case comment.FieldUsername:
+		return m.Username()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database.
+// An error is returned if the mutation operation is not UpdateOne,
+// or the query to the database was failed.
+func (m *CommentMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case comment.FieldFood:
+		return m.OldFood(ctx)
+	case comment.FieldRestaurant:
+		return m.OldRestaurant(ctx)
+	case comment.FieldMsg:
+		return m.OldMsg(ctx)
+	case comment.FieldUsername:
+		return m.OldUsername(ctx)
+	}
+	return nil, fmt.Errorf("unknown Comment field %s", name)
+}
+
+// SetField sets the value for the given name. It returns an
+// error if the field is not defined in the schema, or if the
+// type mismatch the field type.
+func (m *CommentMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case comment.FieldFood:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFood(v)
+		return nil
+	case comment.FieldRestaurant:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRestaurant(v)
+		return nil
+	case comment.FieldMsg:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMsg(v)
+		return nil
+	case comment.FieldUsername:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUsername(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Comment field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented
+// or decremented during this mutation.
+func (m *CommentMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was in/decremented
+// from a field with the given name. The second value indicates
+// that this field was not set, or was not define in the schema.
+func (m *CommentMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value for the given name. It returns an
+// error if the field is not defined in the schema, or if the
+// type mismatch the field type.
+func (m *CommentMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Comment numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared
+// during this mutation.
+func (m *CommentMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicates if this field was
+// cleared in this mutation.
+func (m *CommentMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value for the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *CommentMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Comment nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation regarding the
+// given field name. It returns an error if the field is not
+// defined in the schema.
+func (m *CommentMutation) ResetField(name string) error {
+	switch name {
+	case comment.FieldFood:
+		m.ResetFood()
+		return nil
+	case comment.FieldRestaurant:
+		m.ResetRestaurant()
+		return nil
+	case comment.FieldMsg:
+		m.ResetMsg()
+		return nil
+	case comment.FieldUsername:
+		m.ResetUsername()
+		return nil
+	}
+	return fmt.Errorf("unknown Comment field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this
+// mutation.
+func (m *CommentMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all ids (to other nodes) that were added for
+// the given edge name.
+func (m *CommentMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this
+// mutation.
+func (m *CommentMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all ids (to other nodes) that were removed for
+// the given edge name.
+func (m *CommentMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this
+// mutation.
+func (m *CommentMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean indicates if this edge was
+// cleared in this mutation.
+func (m *CommentMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value for the given name. It returns an
+// error if the edge name is not defined in the schema.
+func (m *CommentMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Comment unique edge %s", name)
+}
+
+// ResetEdge resets all changes in the mutation regarding the
+// given edge name. It returns an error if the edge is not
+// defined in the schema.
+func (m *CommentMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Comment edge %s", name)
+}
+
 // FoodMutation represents an operation that mutate the Foods
 // nodes in the graph.
 type FoodMutation struct {
@@ -601,10 +1061,10 @@ type FoodMutation struct {
 	typ           string
 	id            *int
 	name          *string
+	restaurant    *string
 	desc          *string
 	price         *string
 	image_name    *string
-	restaurant    *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Food, error)
@@ -726,6 +1186,43 @@ func (m *FoodMutation) ResetName() {
 	m.name = nil
 }
 
+// SetRestaurant sets the restaurant field.
+func (m *FoodMutation) SetRestaurant(s string) {
+	m.restaurant = &s
+}
+
+// Restaurant returns the restaurant value in the mutation.
+func (m *FoodMutation) Restaurant() (r string, exists bool) {
+	v := m.restaurant
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRestaurant returns the old restaurant value of the Food.
+// If the Food object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *FoodMutation) OldRestaurant(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldRestaurant is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldRestaurant requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRestaurant: %w", err)
+	}
+	return oldValue.Restaurant, nil
+}
+
+// ResetRestaurant reset all changes of the "restaurant" field.
+func (m *FoodMutation) ResetRestaurant() {
+	m.restaurant = nil
+}
+
 // SetDesc sets the desc field.
 func (m *FoodMutation) SetDesc(s string) {
 	m.desc = &s
@@ -837,43 +1334,6 @@ func (m *FoodMutation) ResetImageName() {
 	m.image_name = nil
 }
 
-// SetRestaurant sets the restaurant field.
-func (m *FoodMutation) SetRestaurant(s string) {
-	m.restaurant = &s
-}
-
-// Restaurant returns the restaurant value in the mutation.
-func (m *FoodMutation) Restaurant() (r string, exists bool) {
-	v := m.restaurant
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRestaurant returns the old restaurant value of the Food.
-// If the Food object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *FoodMutation) OldRestaurant(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldRestaurant is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldRestaurant requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRestaurant: %w", err)
-	}
-	return oldValue.Restaurant, nil
-}
-
-// ResetRestaurant reset all changes of the "restaurant" field.
-func (m *FoodMutation) ResetRestaurant() {
-	m.restaurant = nil
-}
-
 // Op returns the operation name.
 func (m *FoodMutation) Op() Op {
 	return m.op
@@ -892,6 +1352,9 @@ func (m *FoodMutation) Fields() []string {
 	if m.name != nil {
 		fields = append(fields, food.FieldName)
 	}
+	if m.restaurant != nil {
+		fields = append(fields, food.FieldRestaurant)
+	}
 	if m.desc != nil {
 		fields = append(fields, food.FieldDesc)
 	}
@@ -900,9 +1363,6 @@ func (m *FoodMutation) Fields() []string {
 	}
 	if m.image_name != nil {
 		fields = append(fields, food.FieldImageName)
-	}
-	if m.restaurant != nil {
-		fields = append(fields, food.FieldRestaurant)
 	}
 	return fields
 }
@@ -914,14 +1374,14 @@ func (m *FoodMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case food.FieldName:
 		return m.Name()
+	case food.FieldRestaurant:
+		return m.Restaurant()
 	case food.FieldDesc:
 		return m.Desc()
 	case food.FieldPrice:
 		return m.Price()
 	case food.FieldImageName:
 		return m.ImageName()
-	case food.FieldRestaurant:
-		return m.Restaurant()
 	}
 	return nil, false
 }
@@ -933,14 +1393,14 @@ func (m *FoodMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case food.FieldName:
 		return m.OldName(ctx)
+	case food.FieldRestaurant:
+		return m.OldRestaurant(ctx)
 	case food.FieldDesc:
 		return m.OldDesc(ctx)
 	case food.FieldPrice:
 		return m.OldPrice(ctx)
 	case food.FieldImageName:
 		return m.OldImageName(ctx)
-	case food.FieldRestaurant:
-		return m.OldRestaurant(ctx)
 	}
 	return nil, fmt.Errorf("unknown Food field %s", name)
 }
@@ -956,6 +1416,13 @@ func (m *FoodMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case food.FieldRestaurant:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRestaurant(v)
 		return nil
 	case food.FieldDesc:
 		v, ok := value.(string)
@@ -977,13 +1444,6 @@ func (m *FoodMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetImageName(v)
-		return nil
-	case food.FieldRestaurant:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRestaurant(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Food field %s", name)
@@ -1038,6 +1498,9 @@ func (m *FoodMutation) ResetField(name string) error {
 	case food.FieldName:
 		m.ResetName()
 		return nil
+	case food.FieldRestaurant:
+		m.ResetRestaurant()
+		return nil
 	case food.FieldDesc:
 		m.ResetDesc()
 		return nil
@@ -1046,9 +1509,6 @@ func (m *FoodMutation) ResetField(name string) error {
 		return nil
 	case food.FieldImageName:
 		m.ResetImageName()
-		return nil
-	case food.FieldRestaurant:
-		m.ResetRestaurant()
 		return nil
 	}
 	return fmt.Errorf("unknown Food field %s", name)

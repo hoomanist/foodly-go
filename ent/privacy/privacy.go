@@ -233,6 +233,30 @@ func (f AccountMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutatio
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.AccountMutation", m)
 }
 
+// The CommentQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CommentQueryRuleFunc func(context.Context, *ent.CommentQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CommentQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.CommentQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.CommentQuery", q)
+}
+
+// The CommentMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CommentMutationRuleFunc func(context.Context, *ent.CommentMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CommentMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.CommentMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.CommentMutation", m)
+}
+
 // The FoodQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type FoodQueryRuleFunc func(context.Context, *ent.FoodQuery) error

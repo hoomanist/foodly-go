@@ -17,14 +17,14 @@ type Food struct {
 	ID int `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Restaurant holds the value of the "restaurant" field.
+	Restaurant string `json:"restaurant,omitempty"`
 	// Desc holds the value of the "desc" field.
 	Desc string `json:"desc,omitempty"`
 	// Price holds the value of the "price" field.
 	Price string `json:"price,omitempty"`
 	// ImageName holds the value of the "image_name" field.
 	ImageName string `json:"image_name,omitempty"`
-	// Restaurant holds the value of the "restaurant" field.
-	Restaurant string `json:"restaurant,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -32,10 +32,10 @@ func (*Food) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
 		&sql.NullString{}, // name
+		&sql.NullString{}, // restaurant
 		&sql.NullString{}, // desc
 		&sql.NullString{}, // price
 		&sql.NullString{}, // image_name
-		&sql.NullString{}, // restaurant
 	}
 }
 
@@ -57,24 +57,24 @@ func (f *Food) assignValues(values ...interface{}) error {
 		f.Name = value.String
 	}
 	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field desc", values[1])
+		return fmt.Errorf("unexpected type %T for field restaurant", values[1])
+	} else if value.Valid {
+		f.Restaurant = value.String
+	}
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field desc", values[2])
 	} else if value.Valid {
 		f.Desc = value.String
 	}
-	if value, ok := values[2].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field price", values[2])
+	if value, ok := values[3].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field price", values[3])
 	} else if value.Valid {
 		f.Price = value.String
 	}
-	if value, ok := values[3].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field image_name", values[3])
+	if value, ok := values[4].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field image_name", values[4])
 	} else if value.Valid {
 		f.ImageName = value.String
-	}
-	if value, ok := values[4].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field restaurant", values[4])
-	} else if value.Valid {
-		f.Restaurant = value.String
 	}
 	return nil
 }
@@ -104,14 +104,14 @@ func (f *Food) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", f.ID))
 	builder.WriteString(", name=")
 	builder.WriteString(f.Name)
+	builder.WriteString(", restaurant=")
+	builder.WriteString(f.Restaurant)
 	builder.WriteString(", desc=")
 	builder.WriteString(f.Desc)
 	builder.WriteString(", price=")
 	builder.WriteString(f.Price)
 	builder.WriteString(", image_name=")
 	builder.WriteString(f.ImageName)
-	builder.WriteString(", restaurant=")
-	builder.WriteString(f.Restaurant)
 	builder.WriteByte(')')
 	return builder.String()
 }

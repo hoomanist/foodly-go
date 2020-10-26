@@ -33,6 +33,12 @@ func (fu *FoodUpdate) SetName(s string) *FoodUpdate {
 	return fu
 }
 
+// SetRestaurant sets the restaurant field.
+func (fu *FoodUpdate) SetRestaurant(s string) *FoodUpdate {
+	fu.mutation.SetRestaurant(s)
+	return fu
+}
+
 // SetDesc sets the desc field.
 func (fu *FoodUpdate) SetDesc(s string) *FoodUpdate {
 	fu.mutation.SetDesc(s)
@@ -48,12 +54,6 @@ func (fu *FoodUpdate) SetPrice(s string) *FoodUpdate {
 // SetImageName sets the image_name field.
 func (fu *FoodUpdate) SetImageName(s string) *FoodUpdate {
 	fu.mutation.SetImageName(s)
-	return fu
-}
-
-// SetRestaurant sets the restaurant field.
-func (fu *FoodUpdate) SetRestaurant(s string) *FoodUpdate {
-	fu.mutation.SetRestaurant(s)
 	return fu
 }
 
@@ -138,6 +138,13 @@ func (fu *FoodUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: food.FieldName,
 		})
 	}
+	if value, ok := fu.mutation.Restaurant(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: food.FieldRestaurant,
+		})
+	}
 	if value, ok := fu.mutation.Desc(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -157,13 +164,6 @@ func (fu *FoodUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: food.FieldImageName,
-		})
-	}
-	if value, ok := fu.mutation.Restaurant(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: food.FieldRestaurant,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, fu.driver, _spec); err != nil {
@@ -190,6 +190,12 @@ func (fuo *FoodUpdateOne) SetName(s string) *FoodUpdateOne {
 	return fuo
 }
 
+// SetRestaurant sets the restaurant field.
+func (fuo *FoodUpdateOne) SetRestaurant(s string) *FoodUpdateOne {
+	fuo.mutation.SetRestaurant(s)
+	return fuo
+}
+
 // SetDesc sets the desc field.
 func (fuo *FoodUpdateOne) SetDesc(s string) *FoodUpdateOne {
 	fuo.mutation.SetDesc(s)
@@ -205,12 +211,6 @@ func (fuo *FoodUpdateOne) SetPrice(s string) *FoodUpdateOne {
 // SetImageName sets the image_name field.
 func (fuo *FoodUpdateOne) SetImageName(s string) *FoodUpdateOne {
 	fuo.mutation.SetImageName(s)
-	return fuo
-}
-
-// SetRestaurant sets the restaurant field.
-func (fuo *FoodUpdateOne) SetRestaurant(s string) *FoodUpdateOne {
-	fuo.mutation.SetRestaurant(s)
 	return fuo
 }
 
@@ -293,6 +293,13 @@ func (fuo *FoodUpdateOne) sqlSave(ctx context.Context) (_node *Food, err error) 
 			Column: food.FieldName,
 		})
 	}
+	if value, ok := fuo.mutation.Restaurant(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: food.FieldRestaurant,
+		})
+	}
 	if value, ok := fuo.mutation.Desc(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -312,13 +319,6 @@ func (fuo *FoodUpdateOne) sqlSave(ctx context.Context) (_node *Food, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: food.FieldImageName,
-		})
-	}
-	if value, ok := fuo.mutation.Restaurant(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: food.FieldRestaurant,
 		})
 	}
 	_node = &Food{config: fuo.config}

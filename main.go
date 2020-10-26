@@ -31,5 +31,11 @@ func main() {
 	r.POST("/upload/image", UploadImage)
 	r.GET("/q/image/:name", ServeImage)
 	r.GET("/q/restbycity", QueryRestaurants)
-	r.Run(":5000")
+	r.GET("/q/foodbyRTi", FoodsByRest)
+	r.POST("/submit/comment", CreateCamment)
+	r.GET("/q/comment", QueryComment)
+	err = r.Run(":5000")
+	if err != nil {
+		panic(err)
+	}
 }

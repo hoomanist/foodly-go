@@ -112,10 +112,10 @@ func Email(v string) predicate.Account {
 	})
 }
 
-// Role applies equality check predicate on the "role" field. It's identical to RoleEQ.
-func Role(v string) predicate.Account {
+// Token applies equality check predicate on the "token" field. It's identical to TokenEQ.
+func Token(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRole), v))
+		s.Where(sql.EQ(s.C(FieldToken), v))
 	})
 }
 
@@ -126,10 +126,10 @@ func City(v string) predicate.Account {
 	})
 }
 
-// Token applies equality check predicate on the "token" field. It's identical to TokenEQ.
-func Token(v string) predicate.Account {
+// Role applies equality check predicate on the "role" field. It's identical to RoleEQ.
+func Role(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldToken), v))
+		s.Where(sql.EQ(s.C(FieldRole), v))
 	})
 }
 
@@ -466,22 +466,22 @@ func EmailContainsFold(v string) predicate.Account {
 	})
 }
 
-// RoleEQ applies the EQ predicate on the "role" field.
-func RoleEQ(v string) predicate.Account {
+// TokenEQ applies the EQ predicate on the "token" field.
+func TokenEQ(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRole), v))
+		s.Where(sql.EQ(s.C(FieldToken), v))
 	})
 }
 
-// RoleNEQ applies the NEQ predicate on the "role" field.
-func RoleNEQ(v string) predicate.Account {
+// TokenNEQ applies the NEQ predicate on the "token" field.
+func TokenNEQ(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldRole), v))
+		s.Where(sql.NEQ(s.C(FieldToken), v))
 	})
 }
 
-// RoleIn applies the In predicate on the "role" field.
-func RoleIn(vs ...string) predicate.Account {
+// TokenIn applies the In predicate on the "token" field.
+func TokenIn(vs ...string) predicate.Account {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -493,12 +493,12 @@ func RoleIn(vs ...string) predicate.Account {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldRole), v...))
+		s.Where(sql.In(s.C(FieldToken), v...))
 	})
 }
 
-// RoleNotIn applies the NotIn predicate on the "role" field.
-func RoleNotIn(vs ...string) predicate.Account {
+// TokenNotIn applies the NotIn predicate on the "token" field.
+func TokenNotIn(vs ...string) predicate.Account {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -510,70 +510,70 @@ func RoleNotIn(vs ...string) predicate.Account {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldRole), v...))
+		s.Where(sql.NotIn(s.C(FieldToken), v...))
 	})
 }
 
-// RoleGT applies the GT predicate on the "role" field.
-func RoleGT(v string) predicate.Account {
+// TokenGT applies the GT predicate on the "token" field.
+func TokenGT(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldRole), v))
+		s.Where(sql.GT(s.C(FieldToken), v))
 	})
 }
 
-// RoleGTE applies the GTE predicate on the "role" field.
-func RoleGTE(v string) predicate.Account {
+// TokenGTE applies the GTE predicate on the "token" field.
+func TokenGTE(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldRole), v))
+		s.Where(sql.GTE(s.C(FieldToken), v))
 	})
 }
 
-// RoleLT applies the LT predicate on the "role" field.
-func RoleLT(v string) predicate.Account {
+// TokenLT applies the LT predicate on the "token" field.
+func TokenLT(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldRole), v))
+		s.Where(sql.LT(s.C(FieldToken), v))
 	})
 }
 
-// RoleLTE applies the LTE predicate on the "role" field.
-func RoleLTE(v string) predicate.Account {
+// TokenLTE applies the LTE predicate on the "token" field.
+func TokenLTE(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldRole), v))
+		s.Where(sql.LTE(s.C(FieldToken), v))
 	})
 }
 
-// RoleContains applies the Contains predicate on the "role" field.
-func RoleContains(v string) predicate.Account {
+// TokenContains applies the Contains predicate on the "token" field.
+func TokenContains(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldRole), v))
+		s.Where(sql.Contains(s.C(FieldToken), v))
 	})
 }
 
-// RoleHasPrefix applies the HasPrefix predicate on the "role" field.
-func RoleHasPrefix(v string) predicate.Account {
+// TokenHasPrefix applies the HasPrefix predicate on the "token" field.
+func TokenHasPrefix(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldRole), v))
+		s.Where(sql.HasPrefix(s.C(FieldToken), v))
 	})
 }
 
-// RoleHasSuffix applies the HasSuffix predicate on the "role" field.
-func RoleHasSuffix(v string) predicate.Account {
+// TokenHasSuffix applies the HasSuffix predicate on the "token" field.
+func TokenHasSuffix(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldRole), v))
+		s.Where(sql.HasSuffix(s.C(FieldToken), v))
 	})
 }
 
-// RoleEqualFold applies the EqualFold predicate on the "role" field.
-func RoleEqualFold(v string) predicate.Account {
+// TokenEqualFold applies the EqualFold predicate on the "token" field.
+func TokenEqualFold(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldRole), v))
+		s.Where(sql.EqualFold(s.C(FieldToken), v))
 	})
 }
 
-// RoleContainsFold applies the ContainsFold predicate on the "role" field.
-func RoleContainsFold(v string) predicate.Account {
+// TokenContainsFold applies the ContainsFold predicate on the "token" field.
+func TokenContainsFold(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldRole), v))
+		s.Where(sql.ContainsFold(s.C(FieldToken), v))
 	})
 }
 
@@ -688,22 +688,22 @@ func CityContainsFold(v string) predicate.Account {
 	})
 }
 
-// TokenEQ applies the EQ predicate on the "token" field.
-func TokenEQ(v string) predicate.Account {
+// RoleEQ applies the EQ predicate on the "role" field.
+func RoleEQ(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldToken), v))
+		s.Where(sql.EQ(s.C(FieldRole), v))
 	})
 }
 
-// TokenNEQ applies the NEQ predicate on the "token" field.
-func TokenNEQ(v string) predicate.Account {
+// RoleNEQ applies the NEQ predicate on the "role" field.
+func RoleNEQ(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldToken), v))
+		s.Where(sql.NEQ(s.C(FieldRole), v))
 	})
 }
 
-// TokenIn applies the In predicate on the "token" field.
-func TokenIn(vs ...string) predicate.Account {
+// RoleIn applies the In predicate on the "role" field.
+func RoleIn(vs ...string) predicate.Account {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -715,12 +715,12 @@ func TokenIn(vs ...string) predicate.Account {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldToken), v...))
+		s.Where(sql.In(s.C(FieldRole), v...))
 	})
 }
 
-// TokenNotIn applies the NotIn predicate on the "token" field.
-func TokenNotIn(vs ...string) predicate.Account {
+// RoleNotIn applies the NotIn predicate on the "role" field.
+func RoleNotIn(vs ...string) predicate.Account {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -732,70 +732,70 @@ func TokenNotIn(vs ...string) predicate.Account {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldToken), v...))
+		s.Where(sql.NotIn(s.C(FieldRole), v...))
 	})
 }
 
-// TokenGT applies the GT predicate on the "token" field.
-func TokenGT(v string) predicate.Account {
+// RoleGT applies the GT predicate on the "role" field.
+func RoleGT(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldToken), v))
+		s.Where(sql.GT(s.C(FieldRole), v))
 	})
 }
 
-// TokenGTE applies the GTE predicate on the "token" field.
-func TokenGTE(v string) predicate.Account {
+// RoleGTE applies the GTE predicate on the "role" field.
+func RoleGTE(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldToken), v))
+		s.Where(sql.GTE(s.C(FieldRole), v))
 	})
 }
 
-// TokenLT applies the LT predicate on the "token" field.
-func TokenLT(v string) predicate.Account {
+// RoleLT applies the LT predicate on the "role" field.
+func RoleLT(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldToken), v))
+		s.Where(sql.LT(s.C(FieldRole), v))
 	})
 }
 
-// TokenLTE applies the LTE predicate on the "token" field.
-func TokenLTE(v string) predicate.Account {
+// RoleLTE applies the LTE predicate on the "role" field.
+func RoleLTE(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldToken), v))
+		s.Where(sql.LTE(s.C(FieldRole), v))
 	})
 }
 
-// TokenContains applies the Contains predicate on the "token" field.
-func TokenContains(v string) predicate.Account {
+// RoleContains applies the Contains predicate on the "role" field.
+func RoleContains(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldToken), v))
+		s.Where(sql.Contains(s.C(FieldRole), v))
 	})
 }
 
-// TokenHasPrefix applies the HasPrefix predicate on the "token" field.
-func TokenHasPrefix(v string) predicate.Account {
+// RoleHasPrefix applies the HasPrefix predicate on the "role" field.
+func RoleHasPrefix(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldToken), v))
+		s.Where(sql.HasPrefix(s.C(FieldRole), v))
 	})
 }
 
-// TokenHasSuffix applies the HasSuffix predicate on the "token" field.
-func TokenHasSuffix(v string) predicate.Account {
+// RoleHasSuffix applies the HasSuffix predicate on the "role" field.
+func RoleHasSuffix(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldToken), v))
+		s.Where(sql.HasSuffix(s.C(FieldRole), v))
 	})
 }
 
-// TokenEqualFold applies the EqualFold predicate on the "token" field.
-func TokenEqualFold(v string) predicate.Account {
+// RoleEqualFold applies the EqualFold predicate on the "role" field.
+func RoleEqualFold(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldToken), v))
+		s.Where(sql.EqualFold(s.C(FieldRole), v))
 	})
 }
 
-// TokenContainsFold applies the ContainsFold predicate on the "token" field.
-func TokenContainsFold(v string) predicate.Account {
+// RoleContainsFold applies the ContainsFold predicate on the "role" field.
+func RoleContainsFold(v string) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldToken), v))
+		s.Where(sql.ContainsFold(s.C(FieldRole), v))
 	})
 }
 

@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 	"foodly/ent/account"
-
+	"foodly/ent/comment"
+	"foodly/ent/food"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -135,4 +136,48 @@ func QueryRestaurants(c *gin.Context){
 	}
 	fmt.Println(accounts)
 	c.JSON(200, accounts)
+}
+// get foods by their restaurant
+func FoodsByRest(c *gin.Context){
+	ctx := context.Context(context.Background())
+	foods, err := cursor.Food.Query().Where(food.RestaurantEQ(c.Query("restaurant"))).All(ctx)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": fmt.Errorf("%s", err),
+		})
+	}
+	c.JSON(200, foods)
+}
+// submit a Comment
+func CreateCamment(c *gin.Context){
+	ctx := context.Context(context.Background())
+	username, err := cursor.Account.Query().Where(account.PasswordEQ(c.Query("token"))).First(ctx)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": fmt.Errorf("%s", err),
+		})
+	}
+	_, err = cursor.Comment.
+		Create().
+		SetFood(c.Query("name")).
+		SetRestaurant(c.Query("restaurant")).
+		SetMsg(c.Query("name")).
+		SetUsername(username.Username).
+		Save(ctx)
+	c.JSON(400, gin.H{
+		"status": "ok",
+	})
+}
+// query comment
+func QueryComment(c *gin.Context){
+	ctx := context.Context(context.Background())
+	name := c.Query("foodname")
+	restaurant := c.Query("restaurant")
+	comments, err := cursor.Comment.Query().Where(comment.RestaurantEQ(restaurant), comment.FoodEQ(name)).All(ctx)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": fmt.Errorf("%s", err),
+		})
+	}
+	c.JSON(200, comments)
 }

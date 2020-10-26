@@ -9,14 +9,14 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldRestaurant holds the string denoting the restaurant field in the database.
+	FieldRestaurant = "restaurant"
 	// FieldDesc holds the string denoting the desc field in the database.
 	FieldDesc = "desc"
 	// FieldPrice holds the string denoting the price field in the database.
 	FieldPrice = "price"
 	// FieldImageName holds the string denoting the image_name field in the database.
 	FieldImageName = "image_name"
-	// FieldRestaurant holds the string denoting the restaurant field in the database.
-	FieldRestaurant = "restaurant"
 
 	// Table holds the table name of the food in the database.
 	Table = "foods"
@@ -26,10 +26,10 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
+	FieldRestaurant,
 	FieldDesc,
 	FieldPrice,
 	FieldImageName,
-	FieldRestaurant,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

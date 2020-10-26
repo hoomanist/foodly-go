@@ -16,9 +16,9 @@ func (Account) Fields() []ent.Field {
 		field.String("username"),
 		field.String("password"),
 		field.String("email"),
-		field.String("role"),
-		field.String("city"),
 		field.String("token"),
+		field.String("city"),
+		field.String("role"),
 	}
 }
 

@@ -14,10 +14,11 @@ type Food struct {
 func (Food) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name"),
+		field.String("restaurant"),
 		field.String("desc"),
 		field.String("price"),
 		field.String("image_name"),
-		field.String("restaurant"),
+
 	}
 }
 

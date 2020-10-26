@@ -14,9 +14,9 @@ var (
 		{Name: "username", Type: field.TypeString},
 		{Name: "password", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
-		{Name: "role", Type: field.TypeString},
-		{Name: "city", Type: field.TypeString},
 		{Name: "token", Type: field.TypeString},
+		{Name: "city", Type: field.TypeString},
+		{Name: "role", Type: field.TypeString},
 	}
 	// AccountsTable holds the schema information for the "accounts" table.
 	AccountsTable = &schema.Table{
@@ -25,14 +25,29 @@ var (
 		PrimaryKey:  []*schema.Column{AccountsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{},
 	}
+	// CommentsColumns holds the columns for the "comments" table.
+	CommentsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "food", Type: field.TypeString},
+		{Name: "restaurant", Type: field.TypeString},
+		{Name: "msg", Type: field.TypeString},
+		{Name: "username", Type: field.TypeString},
+	}
+	// CommentsTable holds the schema information for the "comments" table.
+	CommentsTable = &schema.Table{
+		Name:        "comments",
+		Columns:     CommentsColumns,
+		PrimaryKey:  []*schema.Column{CommentsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{},
+	}
 	// FoodsColumns holds the columns for the "foods" table.
 	FoodsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
+		{Name: "restaurant", Type: field.TypeString},
 		{Name: "desc", Type: field.TypeString},
 		{Name: "price", Type: field.TypeString},
 		{Name: "image_name", Type: field.TypeString},
-		{Name: "restaurant", Type: field.TypeString},
 	}
 	// FoodsTable holds the schema information for the "foods" table.
 	FoodsTable = &schema.Table{
@@ -44,6 +59,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AccountsTable,
+		CommentsTable,
 		FoodsTable,
 	}
 )

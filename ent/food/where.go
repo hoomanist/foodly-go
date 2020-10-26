@@ -98,6 +98,13 @@ func Name(v string) predicate.Food {
 	})
 }
 
+// Restaurant applies equality check predicate on the "restaurant" field. It's identical to RestaurantEQ.
+func Restaurant(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRestaurant), v))
+	})
+}
+
 // Desc applies equality check predicate on the "desc" field. It's identical to DescEQ.
 func Desc(v string) predicate.Food {
 	return predicate.Food(func(s *sql.Selector) {
@@ -116,13 +123,6 @@ func Price(v string) predicate.Food {
 func ImageName(v string) predicate.Food {
 	return predicate.Food(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldImageName), v))
-	})
-}
-
-// Restaurant applies equality check predicate on the "restaurant" field. It's identical to RestaurantEQ.
-func Restaurant(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRestaurant), v))
 	})
 }
 
@@ -234,6 +234,117 @@ func NameEqualFold(v string) predicate.Food {
 func NameContainsFold(v string) predicate.Food {
 	return predicate.Food(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldName), v))
+	})
+}
+
+// RestaurantEQ applies the EQ predicate on the "restaurant" field.
+func RestaurantEQ(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantNEQ applies the NEQ predicate on the "restaurant" field.
+func RestaurantNEQ(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantIn applies the In predicate on the "restaurant" field.
+func RestaurantIn(vs ...string) predicate.Food {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Food(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldRestaurant), v...))
+	})
+}
+
+// RestaurantNotIn applies the NotIn predicate on the "restaurant" field.
+func RestaurantNotIn(vs ...string) predicate.Food {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Food(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldRestaurant), v...))
+	})
+}
+
+// RestaurantGT applies the GT predicate on the "restaurant" field.
+func RestaurantGT(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantGTE applies the GTE predicate on the "restaurant" field.
+func RestaurantGTE(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantLT applies the LT predicate on the "restaurant" field.
+func RestaurantLT(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantLTE applies the LTE predicate on the "restaurant" field.
+func RestaurantLTE(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantContains applies the Contains predicate on the "restaurant" field.
+func RestaurantContains(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantHasPrefix applies the HasPrefix predicate on the "restaurant" field.
+func RestaurantHasPrefix(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantHasSuffix applies the HasSuffix predicate on the "restaurant" field.
+func RestaurantHasSuffix(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantEqualFold applies the EqualFold predicate on the "restaurant" field.
+func RestaurantEqualFold(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldRestaurant), v))
+	})
+}
+
+// RestaurantContainsFold applies the ContainsFold predicate on the "restaurant" field.
+func RestaurantContainsFold(v string) predicate.Food {
+	return predicate.Food(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldRestaurant), v))
 	})
 }
 
@@ -567,117 +678,6 @@ func ImageNameEqualFold(v string) predicate.Food {
 func ImageNameContainsFold(v string) predicate.Food {
 	return predicate.Food(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldImageName), v))
-	})
-}
-
-// RestaurantEQ applies the EQ predicate on the "restaurant" field.
-func RestaurantEQ(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantNEQ applies the NEQ predicate on the "restaurant" field.
-func RestaurantNEQ(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantIn applies the In predicate on the "restaurant" field.
-func RestaurantIn(vs ...string) predicate.Food {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Food(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldRestaurant), v...))
-	})
-}
-
-// RestaurantNotIn applies the NotIn predicate on the "restaurant" field.
-func RestaurantNotIn(vs ...string) predicate.Food {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Food(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldRestaurant), v...))
-	})
-}
-
-// RestaurantGT applies the GT predicate on the "restaurant" field.
-func RestaurantGT(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantGTE applies the GTE predicate on the "restaurant" field.
-func RestaurantGTE(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantLT applies the LT predicate on the "restaurant" field.
-func RestaurantLT(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantLTE applies the LTE predicate on the "restaurant" field.
-func RestaurantLTE(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantContains applies the Contains predicate on the "restaurant" field.
-func RestaurantContains(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantHasPrefix applies the HasPrefix predicate on the "restaurant" field.
-func RestaurantHasPrefix(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantHasSuffix applies the HasSuffix predicate on the "restaurant" field.
-func RestaurantHasSuffix(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantEqualFold applies the EqualFold predicate on the "restaurant" field.
-func RestaurantEqualFold(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldRestaurant), v))
-	})
-}
-
-// RestaurantContainsFold applies the ContainsFold predicate on the "restaurant" field.
-func RestaurantContainsFold(v string) predicate.Food {
-	return predicate.Food(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldRestaurant), v))
 	})
 }
 

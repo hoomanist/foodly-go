@@ -9,5 +9,8 @@ import (
 // Account is the predicate function for account builders.
 type Account func(*sql.Selector)
 
+// Comment is the predicate function for comment builders.
+type Comment func(*sql.Selector)
+
 // Food is the predicate function for food builders.
 type Food func(*sql.Selector)

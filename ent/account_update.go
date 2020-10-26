@@ -45,9 +45,9 @@ func (au *AccountUpdate) SetEmail(s string) *AccountUpdate {
 	return au
 }
 
-// SetRole sets the role field.
-func (au *AccountUpdate) SetRole(s string) *AccountUpdate {
-	au.mutation.SetRole(s)
+// SetToken sets the token field.
+func (au *AccountUpdate) SetToken(s string) *AccountUpdate {
+	au.mutation.SetToken(s)
 	return au
 }
 
@@ -57,9 +57,9 @@ func (au *AccountUpdate) SetCity(s string) *AccountUpdate {
 	return au
 }
 
-// SetToken sets the token field.
-func (au *AccountUpdate) SetToken(s string) *AccountUpdate {
-	au.mutation.SetToken(s)
+// SetRole sets the role field.
+func (au *AccountUpdate) SetRole(s string) *AccountUpdate {
+	au.mutation.SetRole(s)
 	return au
 }
 
@@ -158,11 +158,11 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: account.FieldEmail,
 		})
 	}
-	if value, ok := au.mutation.Role(); ok {
+	if value, ok := au.mutation.Token(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: account.FieldRole,
+			Column: account.FieldToken,
 		})
 	}
 	if value, ok := au.mutation.City(); ok {
@@ -172,11 +172,11 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: account.FieldCity,
 		})
 	}
-	if value, ok := au.mutation.Token(); ok {
+	if value, ok := au.mutation.Role(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: account.FieldToken,
+			Column: account.FieldRole,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
@@ -215,9 +215,9 @@ func (auo *AccountUpdateOne) SetEmail(s string) *AccountUpdateOne {
 	return auo
 }
 
-// SetRole sets the role field.
-func (auo *AccountUpdateOne) SetRole(s string) *AccountUpdateOne {
-	auo.mutation.SetRole(s)
+// SetToken sets the token field.
+func (auo *AccountUpdateOne) SetToken(s string) *AccountUpdateOne {
+	auo.mutation.SetToken(s)
 	return auo
 }
 
@@ -227,9 +227,9 @@ func (auo *AccountUpdateOne) SetCity(s string) *AccountUpdateOne {
 	return auo
 }
 
-// SetToken sets the token field.
-func (auo *AccountUpdateOne) SetToken(s string) *AccountUpdateOne {
-	auo.mutation.SetToken(s)
+// SetRole sets the role field.
+func (auo *AccountUpdateOne) SetRole(s string) *AccountUpdateOne {
+	auo.mutation.SetRole(s)
 	return auo
 }
 
@@ -326,11 +326,11 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 			Column: account.FieldEmail,
 		})
 	}
-	if value, ok := auo.mutation.Role(); ok {
+	if value, ok := auo.mutation.Token(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: account.FieldRole,
+			Column: account.FieldToken,
 		})
 	}
 	if value, ok := auo.mutation.City(); ok {
@@ -340,11 +340,11 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 			Column: account.FieldCity,
 		})
 	}
-	if value, ok := auo.mutation.Token(); ok {
+	if value, ok := auo.mutation.Role(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: account.FieldToken,
+			Column: account.FieldRole,
 		})
 	}
 	_node = &Account{config: auo.config}

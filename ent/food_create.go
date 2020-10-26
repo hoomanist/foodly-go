@@ -25,6 +25,12 @@ func (fc *FoodCreate) SetName(s string) *FoodCreate {
 	return fc
 }
 
+// SetRestaurant sets the restaurant field.
+func (fc *FoodCreate) SetRestaurant(s string) *FoodCreate {
+	fc.mutation.SetRestaurant(s)
+	return fc
+}
+
 // SetDesc sets the desc field.
 func (fc *FoodCreate) SetDesc(s string) *FoodCreate {
 	fc.mutation.SetDesc(s)
@@ -40,12 +46,6 @@ func (fc *FoodCreate) SetPrice(s string) *FoodCreate {
 // SetImageName sets the image_name field.
 func (fc *FoodCreate) SetImageName(s string) *FoodCreate {
 	fc.mutation.SetImageName(s)
-	return fc
-}
-
-// SetRestaurant sets the restaurant field.
-func (fc *FoodCreate) SetRestaurant(s string) *FoodCreate {
-	fc.mutation.SetRestaurant(s)
 	return fc
 }
 
@@ -103,6 +103,9 @@ func (fc *FoodCreate) check() error {
 	if _, ok := fc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
 	}
+	if _, ok := fc.mutation.Restaurant(); !ok {
+		return &ValidationError{Name: "restaurant", err: errors.New("ent: missing required field \"restaurant\"")}
+	}
 	if _, ok := fc.mutation.Desc(); !ok {
 		return &ValidationError{Name: "desc", err: errors.New("ent: missing required field \"desc\"")}
 	}
@@ -111,9 +114,6 @@ func (fc *FoodCreate) check() error {
 	}
 	if _, ok := fc.mutation.ImageName(); !ok {
 		return &ValidationError{Name: "image_name", err: errors.New("ent: missing required field \"image_name\"")}
-	}
-	if _, ok := fc.mutation.Restaurant(); !ok {
-		return &ValidationError{Name: "restaurant", err: errors.New("ent: missing required field \"restaurant\"")}
 	}
 	return nil
 }
@@ -150,6 +150,14 @@ func (fc *FoodCreate) createSpec() (*Food, *sqlgraph.CreateSpec) {
 		})
 		_node.Name = value
 	}
+	if value, ok := fc.mutation.Restaurant(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: food.FieldRestaurant,
+		})
+		_node.Restaurant = value
+	}
 	if value, ok := fc.mutation.Desc(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -173,14 +181,6 @@ func (fc *FoodCreate) createSpec() (*Food, *sqlgraph.CreateSpec) {
 			Column: food.FieldImageName,
 		})
 		_node.ImageName = value
-	}
-	if value, ok := fc.mutation.Restaurant(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: food.FieldRestaurant,
-		})
-		_node.Restaurant = value
 	}
 	return _node, _spec
 }

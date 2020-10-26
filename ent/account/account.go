@@ -13,12 +13,12 @@ const (
 	FieldPassword = "password"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldRole holds the string denoting the role field in the database.
-	FieldRole = "role"
-	// FieldCity holds the string denoting the city field in the database.
-	FieldCity = "city"
 	// FieldToken holds the string denoting the token field in the database.
 	FieldToken = "token"
+	// FieldCity holds the string denoting the city field in the database.
+	FieldCity = "city"
+	// FieldRole holds the string denoting the role field in the database.
+	FieldRole = "role"
 
 	// Table holds the table name of the account in the database.
 	Table = "accounts"
@@ -30,9 +30,9 @@ var Columns = []string{
 	FieldUsername,
 	FieldPassword,
 	FieldEmail,
-	FieldRole,
-	FieldCity,
 	FieldToken,
+	FieldCity,
+	FieldRole,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

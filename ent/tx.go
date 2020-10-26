@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Account is the client for interacting with the Account builders.
 	Account *AccountClient
+	// Comment is the client for interacting with the Comment builders.
+	Comment *CommentClient
 	// Food is the client for interacting with the Food builders.
 	Food *FoodClient
 
@@ -152,6 +154,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Account = NewAccountClient(tx.config)
+	tx.Comment = NewCommentClient(tx.config)
 	tx.Food = NewFoodClient(tx.config)
 }
 

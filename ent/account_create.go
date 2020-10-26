@@ -37,9 +37,9 @@ func (ac *AccountCreate) SetEmail(s string) *AccountCreate {
 	return ac
 }
 
-// SetRole sets the role field.
-func (ac *AccountCreate) SetRole(s string) *AccountCreate {
-	ac.mutation.SetRole(s)
+// SetToken sets the token field.
+func (ac *AccountCreate) SetToken(s string) *AccountCreate {
+	ac.mutation.SetToken(s)
 	return ac
 }
 
@@ -49,9 +49,9 @@ func (ac *AccountCreate) SetCity(s string) *AccountCreate {
 	return ac
 }
 
-// SetToken sets the token field.
-func (ac *AccountCreate) SetToken(s string) *AccountCreate {
-	ac.mutation.SetToken(s)
+// SetRole sets the role field.
+func (ac *AccountCreate) SetRole(s string) *AccountCreate {
+	ac.mutation.SetRole(s)
 	return ac
 }
 
@@ -115,14 +115,14 @@ func (ac *AccountCreate) check() error {
 	if _, ok := ac.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New("ent: missing required field \"email\"")}
 	}
-	if _, ok := ac.mutation.Role(); !ok {
-		return &ValidationError{Name: "role", err: errors.New("ent: missing required field \"role\"")}
+	if _, ok := ac.mutation.Token(); !ok {
+		return &ValidationError{Name: "token", err: errors.New("ent: missing required field \"token\"")}
 	}
 	if _, ok := ac.mutation.City(); !ok {
 		return &ValidationError{Name: "city", err: errors.New("ent: missing required field \"city\"")}
 	}
-	if _, ok := ac.mutation.Token(); !ok {
-		return &ValidationError{Name: "token", err: errors.New("ent: missing required field \"token\"")}
+	if _, ok := ac.mutation.Role(); !ok {
+		return &ValidationError{Name: "role", err: errors.New("ent: missing required field \"role\"")}
 	}
 	return nil
 }
@@ -175,13 +175,13 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		})
 		_node.Email = value
 	}
-	if value, ok := ac.mutation.Role(); ok {
+	if value, ok := ac.mutation.Token(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: account.FieldRole,
+			Column: account.FieldToken,
 		})
-		_node.Role = value
+		_node.Token = value
 	}
 	if value, ok := ac.mutation.City(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -191,13 +191,13 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		})
 		_node.City = value
 	}
-	if value, ok := ac.mutation.Token(); ok {
+	if value, ok := ac.mutation.Role(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: account.FieldToken,
+			Column: account.FieldRole,
 		})
-		_node.Token = value
+		_node.Role = value
 	}
 	return _node, _spec
 }

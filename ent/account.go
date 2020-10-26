@@ -21,12 +21,12 @@ type Account struct {
 	Password string `json:"password,omitempty"`
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty"`
-	// Role holds the value of the "role" field.
-	Role string `json:"role,omitempty"`
-	// City holds the value of the "city" field.
-	City string `json:"city,omitempty"`
 	// Token holds the value of the "token" field.
 	Token string `json:"token,omitempty"`
+	// City holds the value of the "city" field.
+	City string `json:"city,omitempty"`
+	// Role holds the value of the "role" field.
+	Role string `json:"role,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -36,9 +36,9 @@ func (*Account) scanValues() []interface{} {
 		&sql.NullString{}, // username
 		&sql.NullString{}, // password
 		&sql.NullString{}, // email
-		&sql.NullString{}, // role
-		&sql.NullString{}, // city
 		&sql.NullString{}, // token
+		&sql.NullString{}, // city
+		&sql.NullString{}, // role
 	}
 }
 
@@ -70,9 +70,9 @@ func (a *Account) assignValues(values ...interface{}) error {
 		a.Email = value.String
 	}
 	if value, ok := values[3].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field role", values[3])
+		return fmt.Errorf("unexpected type %T for field token", values[3])
 	} else if value.Valid {
-		a.Role = value.String
+		a.Token = value.String
 	}
 	if value, ok := values[4].(*sql.NullString); !ok {
 		return fmt.Errorf("unexpected type %T for field city", values[4])
@@ -80,9 +80,9 @@ func (a *Account) assignValues(values ...interface{}) error {
 		a.City = value.String
 	}
 	if value, ok := values[5].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field token", values[5])
+		return fmt.Errorf("unexpected type %T for field role", values[5])
 	} else if value.Valid {
-		a.Token = value.String
+		a.Role = value.String
 	}
 	return nil
 }
@@ -116,12 +116,12 @@ func (a *Account) String() string {
 	builder.WriteString(a.Password)
 	builder.WriteString(", email=")
 	builder.WriteString(a.Email)
-	builder.WriteString(", role=")
-	builder.WriteString(a.Role)
-	builder.WriteString(", city=")
-	builder.WriteString(a.City)
 	builder.WriteString(", token=")
 	builder.WriteString(a.Token)
+	builder.WriteString(", city=")
+	builder.WriteString(a.City)
+	builder.WriteString(", role=")
+	builder.WriteString(a.Role)
 	builder.WriteByte(')')
 	return builder.String()
 }
