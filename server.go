@@ -51,8 +51,8 @@ func register(c *gin.Context) {
 // login to account
 func login(c *gin.Context) {
 	ctx := context.Context(context.Background())
-	u, err := cursor.Account.Query().Where(account.UsernameEqualFold(c.Query("username")),
-		account.PasswordEqualFold(Hash(c.Query("password")))).First(ctx)
+	u, err := cursor.Account.Query().Where(account.UsernameEQ(c.Query("username"))).
+		Where(account.PasswordEQ(Hash(c.Query("password")))).First(ctx)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "no such user in db. maybe your entering a wrong password.",
