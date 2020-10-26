@@ -4,8 +4,6 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"encoding/hex"
-	"fmt"
-
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -23,6 +21,5 @@ func Hash(s string) string {
 	h := sha1.New()
 	h.Write([]byte(s))
 	bs := h.Sum(nil)
-	output := fmt.Sprintf("%x", bs)
-	return output
+	return string(bs)
 }
