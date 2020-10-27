@@ -12,3 +12,17 @@ using docker:
 
 # docker run -d -p 5000:5000 hoomanist/foodly
 ```
+
+by hand :
+
+``` 
+$ git clone https://github.com/hoomanist/foodly-go
+
+$ go build 
+
+$ ./foodly
+```
+
+## endpoints
+
+for watching endpoints you can see api.txt
