@@ -4,6 +4,13 @@ import (
   "gorm.io/gorm"
 )
 
+type Comment struct {
+  gorm.Model
+  username string
+  msg string
+  food Food `gorm:"foreignKey:name"`
+}
+
 type User struct {
   gorm.Model
   username string
