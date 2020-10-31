@@ -13,6 +13,15 @@ type User struct {
   token string
 }
 
+type Food struct {
+  gorm.Model
+  restaurant Restaurant `gorm:"foreignKey:username"`
+  name string
+  desc string
+  price int
+  vote int
+}
+
 type Restaurant struct {
   gorm.Model
   kind string

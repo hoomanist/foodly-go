@@ -5,6 +5,7 @@ import (
   "net/http"
 )
 
+// connection check
 func ping(c *gin.Context){
   c.JSON(http.StatusOK, gin.H{
     "message": "pong",

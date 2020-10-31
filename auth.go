@@ -9,6 +9,7 @@ import (
   "golang.org/x/crypto/bcrypt"
 )
 
+// generate a token based on password with a random salt
 func GenerateToken(pass string) string {
 	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	if err != nil {
@@ -19,6 +20,7 @@ func GenerateToken(pass string) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
+// create a hash
 func Hash(s string) string {
 	h := sha1.New()
 	h.Write([]byte(s))
@@ -26,6 +28,7 @@ func Hash(s string) string {
 	return string(bs)
 }
 
+// create a user in database
 func RegisterUser(c *gin.Context){
   var user User
   db.Where(&User{username: c.Query("username")}).Find(&user)
@@ -47,6 +50,7 @@ func RegisterUser(c *gin.Context){
   })
 }
 
+// login to a user and return a token
 func LoginUser(c *gin.Context){
   var user User
   db.Where(&User{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&user)
@@ -60,6 +64,7 @@ func LoginUser(c *gin.Context){
   })
 }
 
+// create a new restaurant in database
 func CreateRestaurant(c *gin.Context){
   var restaurant Restaurant
   db.Where(&Restaurant{username: c.Query("username")}).Find(&restaurant)
@@ -83,6 +88,8 @@ func CreateRestaurant(c *gin.Context){
     "token": token,
   })
 }
+
+// get the restaurant credentials and return it's token
 func LoginRestaurant(c *gin.Context){
   var rest Restaurant
   db.Where(&Restaurant{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&rest)
