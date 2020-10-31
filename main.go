@@ -35,6 +35,12 @@ func main(){
   // vote
   router.GET("/query/vote", GetVotes)
   router.POST("/submit/vote", Vote)
+  // comment
+  router.GET("/query/comments", QueryComments)
+  router.POST("/submit/comments", SubmitComment)
+  // images
+  router.POST("/upload/images", UploadImages)
+  router.GET("/images/:name", GetImage)
   //// start the web server
   router.Run()
 }
