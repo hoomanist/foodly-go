@@ -12,7 +12,7 @@ var db *gorm.DB
 func main(){
   //// connect to sqlite database
   db, err := gorm.Open(sqlite.Open("foodly.db"), &gorm.Config{})
-  if err != nil {
+  if err != nil  {
     panic("failed to connect database")
   }
   //// migrate models
@@ -42,5 +42,5 @@ func main(){
   router.POST("/upload/images", UploadImages)
   router.GET("/images/:name", GetImage)
   //// start the web server
-  router.Run()
+  router.Run(":5000")
 }
