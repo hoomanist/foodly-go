@@ -3,15 +3,16 @@ package main
 import (
   "github.com/gin-gonic/gin"
   "gorm.io/gorm"
-  "gorm.io/driver/sqlite"
+  "gorm.io/driver/mysql"
 )
 
 // database cursor
 var db *gorm.DB
 
 func main(){
+  var err error
   //// connect to sqlite database
-  db, err := gorm.Open(sqlite.Open("foodly.db"), &gorm.Config{})
+  db, err = gorm.Open(mysql.Open("hooman:hooman86@tcp(127.0.0.1:3306)/foodly?charset=utf8&parseTime=True&loc=Local"), &gorm.Config{})
   if err != nil  {
     panic("failed to connect database")
   }
