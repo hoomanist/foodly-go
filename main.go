@@ -20,6 +20,7 @@ func main(){
   db.AutoMigrate(&Restaurant{})
   db.AutoMigrate(&User{})
   db.AutoMigrate(&Food{})
+  db.AutoMigrate(&Comment{})
   //// create router and assign routes
   router := gin.Default()
   // misc
