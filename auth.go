@@ -31,8 +31,8 @@ func Hash(s string) string {
 // create a user in database
 func RegisterUser(c *gin.Context){
   var user User
-  db.Where(&User{username: c.Query("username")}).First(&user)
-  if user.username != "" {
+  result := db.Where(&User{username: c.Query("username")}).First(&user)
+  if result.Error == nil {
     c.JSON(http.StatusBadRequest, gin.H{
       "error": "repitidious username",
     })
