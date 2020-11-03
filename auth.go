@@ -6,7 +6,6 @@ import (
   "crypto/md5"
 	"crypto/sha1"
 	"encoding/hex"
-  "fmt"
   "golang.org/x/crypto/bcrypt"
 )
 
@@ -37,6 +36,7 @@ func RegisterUser(c *gin.Context){
     c.JSON(http.StatusBadRequest, gin.H{
       "error": "repitidious username",
     })
+    return
   }
   token := GenerateToken(c.Query("password"))
   db.Create(&User{
