@@ -32,7 +32,7 @@ func Hash(s string) string {
 // create a user in database
 func RegisterUser(c *gin.Context){
   var user User
-  db.Where("username = ?", fmt.Sprintf("%s",c.Query("username"))).First(&user)
+  db.Where(&User{username: c.Query("username")}).First(&user)
   if user.username != "" {
     c.JSON(http.StatusBadRequest, gin.H{
       "error": "repitidious username",
