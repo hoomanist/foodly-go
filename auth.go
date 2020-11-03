@@ -3,6 +3,7 @@ package main
 import (
   "github.com/gin-gonic/gin"
   "net/http"
+  "fmt"
   "crypto/md5"
 	"crypto/sha1"
 	"encoding/hex"
@@ -21,40 +22,43 @@ func GenerateToken(pass string) string {
 }
 
 // create a hash
-func Hash(s string) string {
+func Hash(s string) []byte {
 	h := sha1.New()
 	h.Write([]byte(s))
 	bs := h.Sum(nil)
-	return string(bs)
+	return bs
 }
 
 // create a user in database
 func RegisterUser(c *gin.Context){
-  var user []User
-  db.Where(&User{username: c.Query("username")}).Find(&user)
-  if len(user) != 0 {
+  var user User
+  fmt.Println(c.Query("username"))
+  result := db.Where(&User{Username: c.Query("username")}).Take(&user)
+  fmt.Println(result)
+  if result.Error == nil {
     c.JSON(http.StatusBadRequest, gin.H{
       "error": "repitidious username",
     })
     return
   }
   token := GenerateToken(c.Query("password"))
-  db.Create(&User{
-    username: c.Query("username"),
-    password: Hash(c.Query("password")),
-    email: c.Query("email"),
-    city: c.Query("city"),
-    token: token,
+  result = db.Create(&User{
+    Username: c.Query("username"),
+    Password: fmt.Sprintln(Hash(c.Query("password"))),
+    Email: c.Query("email"),
+    City: c.Query("city"),
+    Token: fmt.Sprintln(token),
   })
+  fmt.Println(result.Error)
   c.JSON(http.StatusOK, gin.H{
-    "token": token,
+    "token": fmt.Sprintln(token)[:len(fmt.Sprintln(token))-1],
   })
 }
 
 // login to a user and return a token
 func LoginUser(c *gin.Context){
   var user []User
-  db.Where(&User{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&user)
+  db.Where(&User{Username: c.Query("username"), Password: fmt.Sprintln(Hash(c.Query("password")))}).Find(&user)
   if len(user) == 0 {
     c.JSON(http.StatusNotFound, gin.H{
       "error": "user not found",
@@ -62,45 +66,47 @@ func LoginUser(c *gin.Context){
     return
   }
   c.JSON(http.StatusOK, gin.H{
-    "token": user[0].token,
+    "token": user[0].Token[:len(user[0].Token)-1],
   })
 }
 
 // create a new restaurant in database
 func CreateRestaurant(c *gin.Context){
-  var restaurant []Restaurant
-  db.Where(&Restaurant{username: c.Query("username")}).Find(&restaurant)
-  if len(restaurant) != 0 {
+  var restaurant Restaurant
+  result := db.Where(&Restaurant{Username: c.Query("username")}).First(&restaurant)
+  fmt.Println(restaurant)
+  if result.Error == nil {
     c.JSON(http.StatusBadRequest, gin.H{
       "error": "repitidious username",
     })
+    return
   }
   token := GenerateToken(c.Query("password"))
   db.Create(&Restaurant{
-    username: c.Query("username"),
+    Username: c.Query("username"),
     Name: c.Query("name"),
-    kind: c.Query("type"),
-    desc: c.Query("desc"),
-    address: c.Query("address"),
-    password: Hash(c.Query("password")),
-    city: c.Query("city"),
-    token: token,
+    Kind: c.Query("type"),
+    Desc: c.Query("desc"),
+    Address: c.Query("address"),
+    Password: fmt.Sprintln(Hash(c.Query("password"))),
+    City: c.Query("city"),
+    Token: fmt.Sprintln(token),
   })
   c.JSON(http.StatusOK, gin.H{
-    "token": token,
+    "token": fmt.Sprintln(token),
   })
 }
 
 // get the restaurant credentials and return it's token
 func LoginRestaurant(c *gin.Context){
   var rest []Restaurant
-  db.Where(&Restaurant{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&rest)
+  db.Where(&Restaurant{Username: c.Query("username"), Password: fmt.Sprintln(Hash(c.Query("password")))}).Find(&rest)
   if len(rest) == 0{
     c.JSON(http.StatusNotFound, gin.H{
       "error": "user not found",
     })
   }
   c.JSON(http.StatusOK, gin.H{
-    "token": rest[0].token,
+    "token": rest[0].Token,
   })
 }

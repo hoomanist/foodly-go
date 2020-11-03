@@ -6,37 +6,37 @@ import (
 
 type Comment struct {
   gorm.Model
-  username string
-  msg string
-  food Food `gorm:"foreignKey:name"`
+  Username string
+  Msg string
+  Food Food `gorm:"foreignKey:name"`
 }
 
 type User struct {
   gorm.Model
-  username string
-  password string
-  email string
-  city string
-  token string
+  Username string
+  Password string
+  Email string
+  City string
+  Token string
 }
 
 type Food struct {
   gorm.Model
-  restaurant Restaurant `gorm:"foreignKey:username"`
-  name string
-  desc string
-  price int
-  vote int
+  Restaurant Restaurant `gorm:"foreignKey:username"`
+  Name string
+  Desc string
+  Price int
+  Vote int
 }
 
 type Restaurant struct {
   gorm.Model
-  kind string
-  address string
+  Kind string
+  Address string
   Name string
-  city string
-  username string
-  password string
-  desc string
-  token string
+  City string
+  Username string
+  Password string
+  Desc string
+  Token string
 }

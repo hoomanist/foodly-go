@@ -14,17 +14,17 @@ func SubmitComment(c *gin.Context){
   var rest Restaurant
   var food Food
   db.Where(&Restaurant{Name: RestaurantName}).First(&rest)
-  db.Where(&Food{name: FoodName, restaurant: rest}).First(&food)
-  db.Where(&User{token: token}).First(&user)
-  if user.username == "" {
+  db.Where(&Food{Name: FoodName, Restaurant: rest}).First(&food)
+  result := db.Where(&User{Token: token}).First(&user)
+  if result.Error != nil {
     c.JSON(http.StatusNotFound, gin.H{
       "error": "token not found. it is invalid perhaps your login was not properly.",
     })
   }
   db.Create(&Comment{
-    msg: msg,
-    username: user.token,
-    food: food,
+    Msg: msg,
+    Username: user.Username,
+    Food: food,
   })
   c.JSON(http.StatusOK, gin.H{
     "status": "ok",
@@ -38,7 +38,7 @@ func QueryComments(c *gin.Context){
   var food Food
   var comments []Comment
   db.Where(&Restaurant{Name: RestaurantName}).First(&rest)
-  db.Where(&Food{name: FoodName, restaurant: rest}).First(&food)
-  db.Where(&Comment{food: food}).Find(&comments)
+  db.Where(&Food{Name: FoodName, Restaurant: rest}).First(&food)
+  db.Where(&Comment{Food: food}).Find(&comments)
   c.JSON(http.StatusOK, comments)
 }

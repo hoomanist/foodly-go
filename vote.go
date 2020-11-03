@@ -8,16 +8,18 @@ import (
 
 
 func Vote(c *gin.Context){
-  var rest Restaurant
-  var food Food
+  var (
+    rest Restaurant
+    food Food
+  )
   FoodName := c.Query("food")
   RestaurantName := c.Query("restaurant")
-  db.Where(&Restaurant{username: RestaurantName}).First(&rest)
-  db.Where(&Food{restaurant: rest, name: FoodName}).First(&food)
+  db.Where(&Restaurant{Username: RestaurantName}).First(&rest)
+  db.Where(&Food{Restaurant: rest, Name: FoodName}).First(&food)
   if c.Query("dir") == "up" {
-    food.vote += 1
+    food.Vote += 1
   } else if c.Query("dir") == "down" {
-    food.vote -= 1
+    food.Vote -= 1
   }
   db.Save(&food)
   c.JSON(http.StatusOK, gin.H{
@@ -26,13 +28,15 @@ func Vote(c *gin.Context){
 }
 
 func GetVotes(c *gin.Context){
-  var rest Restaurant
-  var food Food
+  var (
+    rest Restaurant
+    food Food
+  )
   FoodName := c.Query("food")
   RestaurantName := c.Query("restaurant")
-  db.Where(&Restaurant{username: RestaurantName}).First(&rest)
-  db.Where(&Food{restaurant: rest, name: FoodName}).First(&food)
+  db.Where(&Restaurant{Username: RestaurantName}).First(&rest)
+  db.Where(&Food{Restaurant: rest, Name: FoodName}).First(&food)
   c.JSON(http.StatusOK, gin.H{
-    "votes": food.vote,
+    "votes": food.Vote,
   })
 }
