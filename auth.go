@@ -30,9 +30,9 @@ func Hash(s string) string {
 
 // create a user in database
 func RegisterUser(c *gin.Context){
-  var user User
-  result := db.Where(&User{username: c.Query("username")}).First(&user)
-  if result.Error == nil {
+  var user []User
+  db.Where(&User{username: c.Query("username")}).Find(&user)
+  if len(user) != 0 {
     c.JSON(http.StatusBadRequest, gin.H{
       "error": "repitidious username",
     })
@@ -53,24 +53,24 @@ func RegisterUser(c *gin.Context){
 
 // login to a user and return a token
 func LoginUser(c *gin.Context){
-  var user User
-  result := db.Where(&User{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&user)
-  if result.Error == nil {
+  var user []User
+  db.Where(&User{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&user)
+  if len(user) == 0 {
     c.JSON(http.StatusNotFound, gin.H{
       "error": "user not found",
     })
     return
   }
   c.JSON(http.StatusOK, gin.H{
-    "token": user.token,
+    "token": user[0].token,
   })
 }
 
 // create a new restaurant in database
 func CreateRestaurant(c *gin.Context){
-  var restaurant Restaurant
-  result := db.Where(&Restaurant{username: c.Query("username")}).Find(&restaurant)
-  if result.Error == nil {
+  var restaurant []Restaurant
+  db.Where(&Restaurant{username: c.Query("username")}).Find(&restaurant)
+  if len(restaurant) != 0 {
     c.JSON(http.StatusBadRequest, gin.H{
       "error": "repitidious username",
     })
@@ -93,14 +93,14 @@ func CreateRestaurant(c *gin.Context){
 
 // get the restaurant credentials and return it's token
 func LoginRestaurant(c *gin.Context){
-  var rest Restaurant
-  result := db.Where(&Restaurant{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&rest)
-  if result.Error == nil {
+  var rest []Restaurant
+  db.Where(&Restaurant{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&rest)
+  if len(rest) == 0{
     c.JSON(http.StatusNotFound, gin.H{
       "error": "user not found",
     })
   }
   c.JSON(http.StatusOK, gin.H{
-    "token": rest.token,
+    "token": rest[0].token,
   })
 }
