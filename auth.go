@@ -54,11 +54,12 @@ func RegisterUser(c *gin.Context){
 // login to a user and return a token
 func LoginUser(c *gin.Context){
   var user User
-  db.Where(&User{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&user)
-  if user.username == "" {
+  result := db.Where(&User{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&user)
+  if result.Error == nil {
     c.JSON(http.StatusNotFound, gin.H{
       "error": "user not found",
     })
+    return
   }
   c.JSON(http.StatusOK, gin.H{
     "token": user.token,
@@ -68,8 +69,8 @@ func LoginUser(c *gin.Context){
 // create a new restaurant in database
 func CreateRestaurant(c *gin.Context){
   var restaurant Restaurant
-  db.Where(&Restaurant{username: c.Query("username")}).Find(&restaurant)
-  if restaurant.username != "" {
+  result := db.Where(&Restaurant{username: c.Query("username")}).Find(&restaurant)
+  if result.Error == nil {
     c.JSON(http.StatusBadRequest, gin.H{
       "error": "repitidious username",
     })
@@ -93,8 +94,8 @@ func CreateRestaurant(c *gin.Context){
 // get the restaurant credentials and return it's token
 func LoginRestaurant(c *gin.Context){
   var rest Restaurant
-  db.Where(&Restaurant{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&rest)
-  if rest.username == "" {
+  result := db.Where(&Restaurant{username: c.Query("username"), password: Hash(c.Query("password"))}).Find(&rest)
+  if result.Error == nil {
     c.JSON(http.StatusNotFound, gin.H{
       "error": "user not found",
     })
