@@ -1,0 +1,4 @@
+- [ ] location
+- [ ] cache
+- [ ] top list
+- [ ] discount
