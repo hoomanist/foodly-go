@@ -9,18 +9,8 @@ import (
 // database cursor
 var db *gorm.DB
 
-func main(){
-  var err error
-  //// connect to sqlite database
-  db, err = gorm.Open(mysql.Open("hooman:hooman86@tcp(127.0.0.1:3306)/foodly?charset=utf8&parseTime=True&loc=Local"), &gorm.Config{})
-  if err != nil  {
-    panic("failed to connect database")
-  }
-  //// migrate models
-  db.AutoMigrate(&Restaurant{})
-  db.AutoMigrate(&User{})
-  db.AutoMigrate(&Food{})
-  db.AutoMigrate(&Comment{})
+func SetupRouter() *gin.Engine {
+
   //// create router and assign routes
   router := gin.Default()
   // misc
@@ -43,6 +33,23 @@ func main(){
   // images
   router.POST("/upload/images", UploadImages)
   router.GET("/images/:name", GetImage)
+  return router
+
+}
+
+func main(){
+  var err error
+  //// connect to sqlite database
+  db, err = gorm.Open(mysql.Open("hooman:hooman86@tcp(127.0.0.1:3306)/foodly?charset=utf8&parseTime=True&loc=Local"), &gorm.Config{})
+  if err != nil  {
+    panic("failed to connect database")
+  }
+  //// migrate models
+  db.AutoMigrate(&Restaurant{})
+  db.AutoMigrate(&User{})
+  db.AutoMigrate(&Food{})
+  db.AutoMigrate(&Comment{})
   //// start the web server
+  router := SetupRouter()
   router.Run(":5000")
 }
