@@ -12,13 +12,13 @@ func Vote(c *gin.Context){
     rest Restaurant
     food Food
   )
-  FoodName := c.Query("food")
-  RestaurantName := c.Query("restaurant")
+  FoodName := c.PostForm("food")
+  RestaurantName := c.PostForm("restaurant")
   db.Where(&Restaurant{Username: RestaurantName}).First(&rest)
   db.Where(&Food{Restaurant: rest, Name: FoodName}).First(&food)
-  if c.Query("dir") == "up" {
+  if c.PostForm("dir") == "up" {
     food.Vote += 1
-  } else if c.Query("dir") == "down" {
+  } else if c.PostForm("dir") == "down" {
     food.Vote -= 1
   }
   db.Save(&food)

@@ -6,10 +6,10 @@ import (
 )
 
 func SubmitComment(c *gin.Context){
-  msg := c.Query("msg")
-  FoodName := c.Query("food")
-  RestaurantName := c.Query("rest")
-  token := c.Query("token")
+  msg := c.PostForm("msg")
+  FoodName := c.PostForm("food")
+  RestaurantName := c.PostForm("rest")
+  token := c.PostForm("token")
   var user User
   var rest Restaurant
   var food Food

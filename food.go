@@ -29,13 +29,13 @@ func GetFoodData(c *gin.Context){
 // Create a Food in DateBase
 func CreateFood(c *gin.Context){
   var rest Restaurant
-  price, _ := strconv.Atoi(c.Query("desc"))
-  RestaurantUserName := c.Query("username")
+  price, _ := strconv.Atoi(c.PostForm("desc"))
+  RestaurantUserName := c.PostForm("username")
   db.Where(&Restaurant{Username: RestaurantUserName}).First(&rest)
   db.Create(&Food{
     Restaurant: rest,
-    Desc: c.Query("desc"),
-    Name: c.Query("name"),
+    Desc: c.PostForm("desc"),
+    Name: c.PostForm("name"),
     Price: price,
     Vote: 0,
   })

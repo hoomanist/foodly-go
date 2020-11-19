@@ -3,6 +3,7 @@ package main
 import (
   "github.com/gin-gonic/gin"
   "net/http"
+  "fmt"
 )
 
 func UploadImages(c *gin.Context){
@@ -10,7 +11,7 @@ func UploadImages(c *gin.Context){
   dst := "uploads/" + file.Filename
 	c.SaveUploadedFile(file, dst)
   c.JSON(http.StatusOK,gin.H{
-    "name": file.Filename,
+    "url": fmt.Sprintf("/images/%s", file.Filename),
   })
 }
 
