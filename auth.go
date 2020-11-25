@@ -84,6 +84,6 @@ func LoginRestaurant(c *gin.Context){
     })
   }
   c.JSON(http.StatusOK, gin.H{
-    "token": rest.Token,
+    "token": rest.Token[:len(rest.Token)-1],
   })
 }

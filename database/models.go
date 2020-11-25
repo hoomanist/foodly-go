@@ -1,14 +1,8 @@
-package main
+package database
 
 import (
 	"gorm.io/gorm"
 )
-
-type Location struct {
-	gorm.Model
-	long float64
-	let  float64
-}
 
 type Comment struct {
 	gorm.Model
@@ -24,6 +18,11 @@ type User struct {
 	Email    string
 	City     string
 	Token    string
+}
+
+type users interface {
+  Create(database *gorm.DB, data map[string]string) error
+  Login(database *gorm.DB, data map[string]string) error
 }
 
 type Food struct {
@@ -45,5 +44,11 @@ type Restaurant struct {
 	Password string
 	Desc     string
 	Token    string
-	Location Location `gorm:"foreignKey:long"`
 }
+type restaurant interface {
+  All(database *gorm.DB, city string) error
+  One(database *gorm.DB, username string) error
+  Create(database *gorm.DB, data map[string]string) error
+  Login(database *gorm.DB, data map[string]string) error
+}
+
