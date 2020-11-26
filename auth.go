@@ -4,6 +4,7 @@ import (
   "github.com/gin-gonic/gin"
   "net/http"
   "fmt"
+  "github.com/hoomanist/foodly/tools"
 )
 
 // create a user in database
@@ -18,10 +19,10 @@ func RegisterUser(c *gin.Context){
     })
     return
   }
-  token := GenerateToken(c.PostForm("password"))
+  token := tools.GenerateToken(c.PostForm("password"))
   result = db.Create(&User{
     Username: c.PostForm("username"),
-    Password: fmt.Sprintln(Hash(c.PostForm("password"))),
+    Password: fmt.Sprintln(tools.Hash(c.PostForm("password"))),
     Email: c.PostForm("email"),
     City: c.PostForm("city"),
     Token: fmt.Sprintln(token),
@@ -35,7 +36,7 @@ func RegisterUser(c *gin.Context){
 // login to a user and return a token
 func LoginUser(c *gin.Context){
   var user []User
-  db.Where(&User{Username: c.PostForm("username"), Password: fmt.Sprintln(Hash(c.PostForm("password")))}).Find(&user)
+  db.Where(&User{Username: c.PostForm("username"), Password: fmt.Sprintln(tools.Hash(c.PostForm("password")))}).Find(&user)
   if len(user) == 0 {
     c.JSON(http.StatusNotFound, gin.H{
       "error": "user not found",
@@ -58,14 +59,14 @@ func CreateRestaurant(c *gin.Context){
     })
     return
   }
-  token := GenerateToken(c.PostForm("password"))
+  token := tools.GenerateToken(c.PostForm("password"))
   db.Create(&Restaurant{
     Username: c.PostForm("username"),
     Name: c.PostForm("name"),
     Kind: c.PostForm("type"),
     Desc: c.PostForm("desc"),
     Address: c.PostForm("address"),
-    Password: fmt.Sprintln(Hash(c.PostForm("password"))),
+    Password: fmt.Sprintln(tools.Hash(c.PostForm("password"))),
     City: c.PostForm("city"),
     Token: fmt.Sprintln(token),
   })
@@ -77,7 +78,7 @@ func CreateRestaurant(c *gin.Context){
 // get the restaurant credentials and return it's token
 func LoginRestaurant(c *gin.Context){
   var rest Restaurant
-  result := db.Where(&Restaurant{Username: c.PostForm("username"), Password: fmt.Sprintln(Hash(c.PostForm("password")))}).Find(&rest)
+  result := db.Where(&Restaurant{Username: c.PostForm("username"), Password: fmt.Sprintln(tools.Hash(c.PostForm("password")))}).Find(&rest)
   if result.Error != nil{
     c.JSON(http.StatusNotFound, gin.H{
       "error": "user not found",

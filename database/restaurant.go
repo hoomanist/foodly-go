@@ -2,7 +2,7 @@ package database
 
 import (
 	"gorm.io/gorm"
-  "github.com/hoomanist/foodly"
+  "github.com/hoomanist/foodly/tools"
   "fmt"
 )
 
@@ -28,7 +28,7 @@ func (model Restaurant) Login(database *gorm.DB, data map[string]string)  error 
   rest := Restaurant{}
   result := database.Where(&Restaurant{
     Username: data["username"],
-    Password: fmt.Sprintln(main.Hash(data["password"])),
+    Password: fmt.Sprintln(tools.Hash(data["password"])),
   }).First(&rest)
   if result.Error != nil {
     return result.Error
@@ -46,8 +46,8 @@ func (model Restaurant) Create(database *gorm.DB, data map[string]string) error 
   }
   model = Restaurant{
     Username: data["username"],
-    Password: fmt.Sprintln(main.Hash(data["password"])),
-    Token: main.GenerateToken(data["password"]),
+    Password: fmt.Sprintln(tools.Hash(data["password"])),
+    Token: tools.GenerateToken(data["password"]),
     Address: data["address"],
     Kind: data["category"],
     Name: data["name"],
