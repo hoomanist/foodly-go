@@ -6,12 +6,13 @@ import (
   "fmt"
 )
 
-func (model Restaurant) All(database *gorm.DB, city string) error {
-  result := database.Where(&Restaurant{City: city}).Find(&model)
+func (model Restaurant) All(database *gorm.DB, city string) ([]Restaurant, error) {
+  rsp := []Restaurant{}
+  result := database.Where(&Restaurant{City: city}).Find(&rsp)
   if result.Error != nil {
-    return  result.Error
+    return  []Restaurant{}, result.Error
   }
-  return nil
+  return rsp, nil
 }
 
 
@@ -43,7 +44,7 @@ func (model Restaurant) Create(database *gorm.DB, data map[string]string) error 
   if result.Error == nil {
     return result.Error
   }
-  result = database.Create(&Restaurant{
+  model = Restaurant{
     Username: data["username"],
     Password: fmt.Sprintln(main.Hash(data["password"])),
     Token: main.GenerateToken(data["password"]),
@@ -51,7 +52,8 @@ func (model Restaurant) Create(database *gorm.DB, data map[string]string) error 
     Kind: data["category"],
     Name: data["name"],
     Desc: data["desc"],
-  }).First(&model)
+  }
+  result = database.Create(&model)
   if result.Error != nil {
     return result.Error
   }

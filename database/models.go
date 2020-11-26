@@ -6,23 +6,9 @@ import (
 
 type Comment struct {
 	gorm.Model
-	Username string
+  User     User
 	Msg      string
 	Food     Food `gorm:"foreignKey:name"`
-}
-
-type User struct {
-	gorm.Model
-	Username string
-	Password string
-	Email    string
-	City     string
-	Token    string
-}
-
-type users interface {
-  Create(database *gorm.DB, data map[string]string) error
-  Login(database *gorm.DB, data map[string]string) error
 }
 
 type Food struct {
@@ -32,6 +18,15 @@ type Food struct {
 	Desc       string
 	Price      int
 	Vote       int
+}
+
+type User struct {
+	gorm.Model
+	Username string
+	Password string
+	Email    string
+	City     string
+	Token    string
 }
 
 type Restaurant struct {
@@ -44,11 +39,5 @@ type Restaurant struct {
 	Password string
 	Desc     string
 	Token    string
-}
-type restaurant interface {
-  All(database *gorm.DB, city string) error
-  One(database *gorm.DB, username string) error
-  Create(database *gorm.DB, data map[string]string) error
-  Login(database *gorm.DB, data map[string]string) error
 }
 
