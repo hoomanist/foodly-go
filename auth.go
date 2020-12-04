@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/hoomanist/foodly/database"
-	"github.com/hoomanist/foodly/tools"
 	"net/http"
 )
 
