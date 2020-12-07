@@ -1,82 +1,90 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/hoomanist/foodly/database"
+	"github.com/hoomanist/foodly/tools"
 	"net/http"
 )
 
 // create a user in database
 func RegisterUser(c *gin.Context) {
-	var user database.User
-	err := user.Create(db, map[string]string{
-		"username": c.PostForm("username"),
-		"password": c.PostForm("password"),
-		"city":     c.PostForm("city"),
-		"email":    c.PostForm("email"),
-	})
-	if err != nil {
+	var user User
+	fmt.Println(c.PostForm("username"))
+	result := db.Where(&User{Username: c.PostForm("username")}).Take(&user)
+	fmt.Println(result)
+	if result.Error == nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "یه مشکلی پیش اومده",
+			"error": "repitidious username",
 		})
+		return
 	}
+	token := tools.GenerateToken(c.PostForm("password"))
+	result = db.Create(&User{
+		Username: c.PostForm("username"),
+		Password: fmt.Sprintln(tools.Hash(c.PostForm("password"))),
+		Email:    c.PostForm("email"),
+		City:     c.PostForm("city"),
+		Token:    fmt.Sprintln(token),
+	})
+	fmt.Println(result.Error)
 	c.JSON(http.StatusOK, gin.H{
-		"token": user.Token,
+		"token": fmt.Sprintln(token)[:len(fmt.Sprintln(token))-1],
 	})
 }
 
 // login to a user and return a token
 func LoginUser(c *gin.Context) {
-	var user database.User
-	err := user.Login(db, map[string]string{
-		"username": c.PostForm("username"),
-		"password": c.PostForm("password"),
-	})
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "یه مشکلی پیش اومده",
+	var user []User
+	db.Where(&User{Username: c.PostForm("username"), Password: fmt.Sprintln(tools.Hash(c.PostForm("password")))}).Find(&user)
+	if len(user) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "user not found",
 		})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"token": user.Token,
+		"token": user[0].Token[:len(user[0].Token)-1],
 	})
 }
 
 // create a new restaurant in database
 func CreateRestaurant(c *gin.Context) {
-	var restaurant database.Restaurant
-	err := restaurant.Create(db, map[string]string{
-		"Username": c.PostForm("username"),
-		"Name":     c.PostForm("name"),
-		"Kind":     c.PostForm("type"),
-		"Desc":     c.PostForm("desc"),
-		"Address":  c.PostForm("address"),
-		"Password": c.PostForm("password"),
-		"City":     c.PostForm("city"),
-	})
-	if err != nil {
+	var restaurant Restaurant
+	result := db.Where(&Restaurant{Username: c.PostForm("username")}).First(&restaurant)
+	fmt.Println(restaurant)
+	if result.Error == nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "یه مشکلی پیش اومده",
+			"error": "repitidious username",
 		})
+		return
 	}
+	token := tools.GenerateToken(c.PostForm("password"))
+	db.Create(&Restaurant{
+		Username: c.PostForm("username"),
+		Name:     c.PostForm("name"),
+		Kind:     c.PostForm("type"),
+		Desc:     c.PostForm("desc"),
+		Address:  c.PostForm("address"),
+		Password: fmt.Sprintln(tools.Hash(c.PostForm("password"))),
+		City:     c.PostForm("city"),
+		Token:    fmt.Sprintln(token),
+	})
 	c.JSON(http.StatusOK, gin.H{
-		"token": restaurant.Token,
+		"token": fmt.Sprintln(token),
 	})
 }
 
 // get the restaurant credentials and return it's token
 func LoginRestaurant(c *gin.Context) {
-	var rest database.Restaurant
-	err := rest.Login(db, map[string]string{
-		"username": c.PostForm("username"),
-		"password": c.PostForm("password"),
-	})
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "یه مشکلی پیش اومده",
+	var rest Restaurant
+	result := db.Where(&Restaurant{Username: c.PostForm("username"), Password: fmt.Sprintln(tools.Hash(c.PostForm("password")))}).Find(&rest)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "user not found",
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"token": rest.Token,
+		"token": rest.Token[:len(rest.Token)-1],
 	})
 }
