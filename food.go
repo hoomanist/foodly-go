@@ -41,3 +41,17 @@ func CreateFood(c *gin.Context) {
 		Vote:       0,
 	})
 }
+
+// Get Restaurant by their votes
+func FoodByVote(c *gin.Context) {
+	restaurants := []Restaurant{}
+	result := db.Where(&Restaurant{
+		City: c.PostForm("city"),
+	}).Order("total").Limit(20).Find(&restaurants)
+	if result.Error != nil {
+		c.JSON(404, gin.H{
+			"error": "رستورانی پیدا نشد",
+		})
+	}
+	c.JSON(200, restaurants)
+}

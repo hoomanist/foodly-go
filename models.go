@@ -37,6 +37,7 @@ type Food struct {
 
 type Restaurant struct {
 	gorm.Model
+	Total    int64
 	Kind     string
 	Address  string
 	Name     string

@@ -61,14 +61,15 @@ func CreateRestaurant(c *gin.Context) {
 	}
 	token := tools.GenerateToken(c.PostForm("password"))
 	db.Create(&Restaurant{
-		Username: c.PostForm("username"),
-		Name:     c.PostForm("name"),
-		Kind:     c.PostForm("type"),
-		Desc:     c.PostForm("desc"),
-		Address:  c.PostForm("address"),
-		Password: fmt.Sprintln(tools.Hash(c.PostForm("password"))),
-		City:     c.PostForm("city"),
-		Token:    fmt.Sprintln(token),
+		Username:  c.PostForm("username"),
+		TotalVote: 0,
+		Name:      c.PostForm("name"),
+		Kind:      c.PostForm("type"),
+		Desc:      c.PostForm("desc"),
+		Address:   c.PostForm("address"),
+		Password:  fmt.Sprintln(tools.Hash(c.PostForm("password"))),
+		City:      c.PostForm("city"),
+		Token:     fmt.Sprintln(token),
 	})
 	c.JSON(http.StatusOK, gin.H{
 		"token": fmt.Sprintln(token),
